@@ -13,6 +13,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Security\AppAuthenticator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -52,7 +53,7 @@ class SecurityController extends AbstractController
             $em->persist($user);
             $em->flush();
 
-            return $security->login($user, 'form_login', 'main');
+            return $security->login($user, AppAuthenticator::class, 'main');
         }
 
         return $this->render('security/register.html.twig', ['form' => $form]);
