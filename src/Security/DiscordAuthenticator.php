@@ -46,15 +46,18 @@ class DiscordAuthenticator extends OAuth2Authenticator
                 $email = $discordUser->getEmail();
                 $repo = $this->em->getRepository(User::class);
 
+                // Priorité à l'ID Discord ; fallback email uniquement si le scope 'email' a été accordé
                 $user = $repo->findOneBy(['discordId' => (string) $discordUser->getId()])
                     ?? ($email ? $repo->findOneBy(['email' => $email]) : null);
 
                 if (!$user) {
                     $user = (new User())
+                        // Discord n'expose l'email que si le scope 'email' est accordé — fallback invalide
                         ->setEmail($email ?? $discordUser->getUsername().'@discord.invalid')
                         ->setIsVerified((bool) $discordUser->getVerified());
                 }
 
+                // getAvatarHash() retourne null si l'utilisateur utilise l'avatar par défaut Discord
                 $avatarHash = $discordUser->getAvatarHash();
                 $avatarUrl = $avatarHash
                     ? \sprintf('https://cdn.discordapp.com/avatars/%s/%s.png', $discordUser->getId(), $avatarHash)

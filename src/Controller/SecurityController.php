@@ -62,30 +62,35 @@ class SecurityController extends AbstractController
     #[Route('/logout', name: 'app_logout')]
     public function logout(): never
     {
+        // Jamais atteint : le firewall Symfony intercepte /logout et gère la déconnexion
         throw new \LogicException('This method should never be reached.');
     }
 
     #[Route('/connect/google', name: 'connect_google')]
     public function connectGoogle(ClientRegistry $clientRegistry): RedirectResponse
     {
+        // Redirige vers Google avec les scopes minimaux requis (openid + profil + email)
         return $clientRegistry->getClient('google')->redirect(['openid', 'profile', 'email'], []);
     }
 
     #[Route('/connect/google/check', name: 'connect_google_check')]
     public function connectGoogleCheck(): never
     {
+        // Jamais atteint : GoogleAuthenticator prend la main sur cette route via supports()
         throw new \LogicException('This method should never be reached.');
     }
 
     #[Route('/connect/discord', name: 'connect_discord')]
     public function connectDiscord(ClientRegistry $clientRegistry): RedirectResponse
     {
+        // Scope 'identify' = username/avatar ; 'email' = adresse e-mail (peut être refusé par l'utilisateur)
         return $clientRegistry->getClient('discord')->redirect(['identify', 'email'], []);
     }
 
     #[Route('/connect/discord/check', name: 'connect_discord_check')]
     public function connectDiscordCheck(): never
     {
+        // Jamais atteint : DiscordAuthenticator prend la main sur cette route via supports()
         throw new \LogicException('This method should never be reached.');
     }
 }

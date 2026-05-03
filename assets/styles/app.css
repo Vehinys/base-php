@@ -391,3 +391,24 @@
         * { transition: none !important; }
     }
 }
+
+@layer components {
+    /* ─── ANIMATIONS HOMEPAGE ────────────────────── */
+
+    /* Révélation depuis le bas (hero, cartes features) */
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Révélation depuis le haut (badge tagline) */
+    @keyframes fadeDown {
+        from { opacity: 0; transform: translateY(-12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Désactive les animations CSS inline si l'utilisateur préfère le mouvement réduit */
+    @media (prefers-reduced-motion: reduce) {
+        [style*="animation"] { animation: none !important; opacity: 1 !important; }
+    }
+}

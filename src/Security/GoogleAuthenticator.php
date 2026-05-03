@@ -46,12 +46,14 @@ class GoogleAuthenticator extends OAuth2Authenticator
                 $email = $googleUser->getEmail();
                 $repo = $this->em->getRepository(User::class);
 
+                // Priorité à l'ID Google ; fallback sur l'email pour lier un compte existant
                 $user = $repo->findOneBy(['googleId' => $googleUser->getId()])
                     ?? $repo->findOneBy(['email' => $email]);
 
                 if (!$user) {
                     $user = (new User())
                         ->setEmail($email)
+                        // Google vérifie l'email — pas besoin d'une seconde validation
                         ->setIsVerified(true);
                 }
 

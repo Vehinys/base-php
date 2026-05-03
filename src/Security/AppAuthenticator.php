@@ -20,6 +20,7 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class AppAuthenticator extends AbstractLoginFormAuthenticator
 {
+    // TargetPathTrait mémorise l'URL protégée visitée avant la redirection vers /login
     use TargetPathTrait;
 
     public const LOGIN_ROUTE = 'app_login';
@@ -31,13 +32,16 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $email = $request->getPayload()->getString('email');
+        // Stocke l'email en session pour le repopuler dans le formulaire après échec
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
         return new Passport(
             new UserBadge($email),
             new PasswordCredentials($request->getPayload()->getString('password')),
             [
+                // CsrfTokenBadge valide le jeton _csrf_token soumis avec le formulaire
                 new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
+                // RememberMeBadge active le cookie persistant si la case est cochée
                 new RememberMeBadge(),
             ]
         );
@@ -45,6 +49,7 @@ class AppAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // Redirige vers l'URL d'origine si l'utilisateur venait d'une page protégée
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }

@@ -142,17 +142,14 @@
     </div>
 </section>
 
-<style>
-@keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+{# Schéma JSON-LD — données structurées pour Google (non-executable, exempt CSP script-src) #}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "{{ 'app.name'|trans|escape('js') }}",
+    "description": "{{ 'app.description'|trans|escape('js') }}",
+    "url": "{{ app.request.schemeAndHttpHost }}"
 }
-@keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-12px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-    [style*="animation"] { animation: none !important; opacity: 1 !important; }
-}
-</style>
+</script>
 {% endblock %}

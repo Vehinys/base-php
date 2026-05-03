@@ -17,6 +17,7 @@ class LocaleSubscriber implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
+        // hasPreviousSession() évite d'initialiser une session inutile sur les requêtes sans cookie
         if (!$request->hasPreviousSession()) {
             return;
         }
@@ -27,6 +28,7 @@ class LocaleSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
+        // Priorité 20 : s'exécute avant le firewall (prio 8) pour que la locale soit connue dès l'auth
         return [KernelEvents::REQUEST => [['onKernelRequest', 20]]];
     }
 }

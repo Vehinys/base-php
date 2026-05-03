@@ -29,6 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    // nullable : les comptes créés via OAuth (Google, Discord) n'ont pas de mot de passe local
     #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
@@ -108,6 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function eraseCredentials(): void
     {
+        // Vide les données sensibles temporaires (ex. plainPassword) après authentification
     }
 
     public function getName(): ?string
