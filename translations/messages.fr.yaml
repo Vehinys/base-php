@@ -1,0 +1,55 @@
+app:
+    name: "BaseApp"
+    description: "Starter Symfony avec auth, i18n et CI prêt à l'emploi."
+
+nav:
+    skip_to_content: "Aller au contenu principal"
+    main: "Navigation principale"
+    login: "Connexion"
+    register: "S'inscrire"
+    logout: "Se déconnecter"
+
+home:
+    title: "Accueil"
+    tagline: "Starter prêt à l'emploi"
+    headline: "Votre base Symfony"
+    subtitle: "Auth email/password, OAuth Google & Discord, i18n FR/EN, CI GitHub Actions — tout est prêt."
+    cta_register: "Créer un compte"
+    cta_login: "Se connecter"
+    cta_logged: "Bonjour, %name% !"
+    features_title: "Fonctionnalités"
+    feature_auth_title: "Authentification complète"
+    feature_auth_desc: "Email/mot de passe, Google OAuth, Discord OAuth. Sessions sécurisées, remember me, rate limiting."
+    feature_i18n_title: "Multilingue FR/EN"
+    feature_i18n_desc: "Détection automatique de la langue et sélecteur manuel. Facile à étendre."
+    feature_security_title: "Sécurité renforcée"
+    feature_security_desc: "Headers CSP, HSTS, argon2, CSRF, Nelmio Security Bundle configuré."
+
+auth:
+    login_title: "Connexion"
+    register_title: "Créer un compte"
+    no_account: "Pas encore de compte ?"
+    already_account: "Déjà un compte ?"
+    register_link: "S'inscrire"
+    login_link: "Se connecter"
+    login_submit: "Se connecter"
+    register_submit: "Créer mon compte"
+    or_continue: "ou continuer avec"
+    login_google: "Continuer avec Google"
+    login_discord: "Continuer avec Discord"
+    register_google: "S'inscrire avec Google"
+    register_discord: "S'inscrire avec Discord"
+    email_already_used: "Cette adresse e-mail est déjà utilisée."
+
+form:
+    name: "Nom complet"
+    email: "Adresse e-mail"
+    password: "Mot de passe"
+    remember_me: "Se souvenir de moi"
+    agree_terms: "J'accepte les conditions d'utilisation"
+    agree_terms_required: "Vous devez accepter les conditions."
+    password_required: "Le mot de passe est obligatoire."
+    password_min: "Le mot de passe doit contenir au moins {{ limit }} caractères."
+
+footer:
+    built_with: "Construit avec Symfony 7.4 & Tailwind v4"

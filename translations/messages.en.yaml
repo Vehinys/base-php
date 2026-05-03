@@ -1,0 +1,55 @@
+app:
+    name: "BaseApp"
+    description: "Symfony starter with auth, i18n, and CI ready to use."
+
+nav:
+    skip_to_content: "Skip to main content"
+    main: "Main navigation"
+    login: "Sign in"
+    register: "Sign up"
+    logout: "Sign out"
+
+home:
+    title: "Home"
+    tagline: "Ready-to-use starter"
+    headline: "Your Symfony base"
+    subtitle: "Email/password auth, Google & Discord OAuth, FR/EN i18n, GitHub Actions CI — everything is set."
+    cta_register: "Create an account"
+    cta_login: "Sign in"
+    cta_logged: "Hello, %name%!"
+    features_title: "Features"
+    feature_auth_title: "Full authentication"
+    feature_auth_desc: "Email/password, Google OAuth, Discord OAuth. Secure sessions, remember me, rate limiting."
+    feature_i18n_title: "Multilingual FR/EN"
+    feature_i18n_desc: "Automatic language detection and manual switcher. Easy to extend."
+    feature_security_title: "Hardened security"
+    feature_security_desc: "CSP headers, HSTS, argon2, CSRF, Nelmio Security Bundle configured."
+
+auth:
+    login_title: "Sign in"
+    register_title: "Create an account"
+    no_account: "No account yet?"
+    already_account: "Already have an account?"
+    register_link: "Sign up"
+    login_link: "Sign in"
+    login_submit: "Sign in"
+    register_submit: "Create my account"
+    or_continue: "or continue with"
+    login_google: "Continue with Google"
+    login_discord: "Continue with Discord"
+    register_google: "Sign up with Google"
+    register_discord: "Sign up with Discord"
+    email_already_used: "This email address is already in use."
+
+form:
+    name: "Full name"
+    email: "Email address"
+    password: "Password"
+    remember_me: "Remember me"
+    agree_terms: "I agree to the terms of service"
+    agree_terms_required: "You must accept the terms."
+    password_required: "Password is required."
+    password_min: "Password must be at least {{ limit }} characters."
+
+footer:
+    built_with: "Built with Symfony 7.4 & Tailwind v4"

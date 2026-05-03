@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|slice(0,2) }}" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ 'app.name'|trans }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ 'app.description'|trans }}{% endblock %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+
+    <meta property="og:title" content="{% block og_title %}{{ 'app.name'|trans }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ 'app.description'|trans }}{% endblock %}">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="{{ app.request.uri }}">
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body class="min-h-screen flex flex-col" style="background-color:var(--color-bg);color:var(--color-text)">
+
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 btn-primary">
+        {{ 'nav.skip_to_content'|trans }}
+    </a>
+
+    <header role="banner" style="background-color:var(--color-surface);border-bottom:1px solid var(--color-border)">
+        <nav role="navigation" aria-label="{{ 'nav.main'|trans }}"
+             class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+            <a href="{{ path('app_home') }}"
+               class="text-xl font-bold"
+               style="font-family:var(--font-display);color:var(--color-primary)">
+                {{ 'app.name'|trans }}
+            </a>
+
+            <div class="flex items-center gap-4">
+                {% if app.user %}
+                    <span class="text-sm" style="color:var(--color-muted)">
+                        {{ app.user.name ?? app.user.email }}
+                    </span>
+                    <a href="{{ path('app_logout') }}"
+                       class="text-sm font-medium transition-colors"
+                       style="color:var(--color-muted)"
+                       onmouseover="this.style.color='var(--color-text)'"
+                       onmouseout="this.style.color='var(--color-muted)'">
+                        {{ 'nav.logout'|trans }}
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_login') }}" class="text-sm font-medium" style="color:var(--color-muted)">
+                        {{ 'nav.login'|trans }}
+                    </a>
+                    <a href="{{ path('app_register') }}" class="btn-primary text-sm">
+                        {{ 'nav.register'|trans }}
+                    </a>
+                {% endif %}
+
+                <div class="flex items-center gap-1 text-xs" style="color:var(--color-muted)">
+                    <a href="{{ path('app_locale', {locale: 'fr'}) }}"
+                       class="px-2 py-1 rounded transition-colors {% if app.request.locale starts with 'fr' %}font-semibold{% endif %}"
+                       style="{% if app.request.locale starts with 'fr' %}color:var(--color-primary){% endif %}"
+                       aria-label="Français"
+                       hreflang="fr">FR</a>
+                    <span aria-hidden="true">/</span>
+                    <a href="{{ path('app_locale', {locale: 'en'}) }}"
+                       class="px-2 py-1 rounded transition-colors {% if app.request.locale starts with 'en' %}font-semibold{% endif %}"
+                       style="{% if app.request.locale starts with 'en' %}color:var(--color-primary){% endif %}"
+                       aria-label="English"
+                       hreflang="en">EN</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content" role="main" class="flex-1">
+        {% block body %}{% endblock %}
+    </main>
+
+    <footer role="contentinfo" class="text-center py-8 text-sm" style="color:var(--color-muted);border-top:1px solid var(--color-border)">
+        <p>{{ 'app.name'|trans }} &mdash; {{ 'footer.built_with'|trans }}</p>
+    </footer>
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</body>
+</html>

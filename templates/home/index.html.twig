@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'home.title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+
+{% block body %}
+<section class="max-w-4xl mx-auto px-6 py-24 text-center">
+    <p class="text-sm font-semibold uppercase tracking-widest mb-4"
+       style="color:var(--color-primary);font-family:var(--font-display);letter-spacing:0.25em;
+              animation:fadeDown 0.6s ease both">
+        {{ 'home.tagline'|trans }}
+    </p>
+
+    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6"
+        style="font-family:var(--font-display);animation:fadeUp 0.6s 0.1s ease both;opacity:0">
+        {{ 'home.headline'|trans }}
+    </h1>
+
+    <p class="text-lg max-w-xl mx-auto mb-10"
+       style="color:var(--color-muted);animation:fadeUp 0.6s 0.2s ease both;opacity:0">
+        {{ 'home.subtitle'|trans }}
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4"
+         style="animation:fadeUp 0.6s 0.3s ease both;opacity:0">
+        {% if app.user %}
+            <a href="#" class="btn-primary text-base px-8 py-3">
+                {{ 'home.cta_logged'|trans({ name: app.user.name ?? app.user.email }) }}
+            </a>
+        {% else %}
+            <a href="{{ path('app_register') }}" class="btn-primary text-base px-8 py-3">
+                {{ 'home.cta_register'|trans }}
+            </a>
+            <a href="{{ path('app_login') }}"
+               class="text-base font-medium transition-colors"
+               style="color:var(--color-muted)">
+                {{ 'home.cta_login'|trans }}
+            </a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="max-w-5xl mx-auto px-6 pb-24"
+         aria-labelledby="features-heading">
+    <h2 id="features-heading" class="sr-only">{{ 'home.features_title'|trans }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for feature in ['auth', 'i18n', 'security'] %}
+        <article class="card" style="animation:fadeUp 0.6s {{ 0.4 + loop.index0 * 0.1 }}s ease both;opacity:0">
+            <div class="text-2xl mb-4" aria-hidden="true">
+                {% if feature == 'auth' %}&#128274;{% elseif feature == 'i18n' %}&#127757;{% else %}&#128737;{% endif %}
+            </div>
+            <h3 class="text-lg font-semibold mb-2" style="font-family:var(--font-display)">
+                {{ ('home.feature_' ~ feature ~ '_title')|trans }}
+            </h3>
+            <p class="text-sm" style="color:var(--color-muted)">
+                {{ ('home.feature_' ~ feature ~ '_desc')|trans }}
+            </p>
+        </article>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    [style*="animation"] { animation: none !important; opacity: 1 !important; }
+}
+</style>
+{% endblock %}

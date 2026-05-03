@@ -1,0 +1,9 @@
+parameters:
+    level: 6
+    paths:
+        - src
+    excludePaths:
+        - src/Kernel.php
+    treatPhpDocTypesAsCertain: false
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
