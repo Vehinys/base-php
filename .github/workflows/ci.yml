@@ -95,9 +95,5 @@ jobs:
       - name: Run database migrations
         run: php bin/console doctrine:migrations:migrate --no-interaction
 
-      - name: Run unit & functional tests
-        run: vendor/bin/phpunit --testdox --exclude-group e2e
-
-      - name: Run E2E tests (Panther)
-        run: vendor/bin/phpunit --testdox --group e2e
-        continue-on-error: true
+      - name: Run tests
+        run: vendor/bin/phpunit --testdox

@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'error.404_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block body %}
+<div style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem;text-align:center;position:relative;overflow:hidden">
+
+    {# Orbe décoratif — aria-hidden car purement décoratif #}
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                    width:600px;height:600px;
+                    background:radial-gradient(circle,rgba(124,106,247,0.08) 0%,transparent 65%);
+                    border-radius:50%;filter:blur(80px)"></div>
+    </div>
+
+    <div style="position:relative;z-index:1;max-width:480px">
+        {# Code d'erreur stylisé — aria-hidden car le h1 texte suffit #}
+        <p aria-hidden="true"
+           style="font-family:var(--font-display);font-size:7rem;font-weight:800;
+                  line-height:1;margin:0 0 1rem;
+                  background:linear-gradient(135deg,rgba(124,106,247,0.5),rgba(124,106,247,0.15));
+                  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                  background-clip:text">
+            404
+        </p>
+
+        <h1 style="font-family:var(--font-display);font-size:1.875rem;font-weight:800;
+                   color:var(--color-text);margin:0 0 1rem;letter-spacing:-0.02em">
+            {{ 'error.404_title'|trans }}
+        </h1>
+
+        <p style="font-size:1rem;color:var(--color-muted);line-height:1.6;margin:0 0 2.5rem">
+            {{ 'error.404_desc'|trans }}
+        </p>
+
+        <a href="{{ path('app_home') }}" class="btn-primary">
+            {{ 'error.back_home'|trans }}
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'error.error_code'|trans({'%code%': status_code}) }} — {{ 'app.name'|trans }}{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block body %}
+<div style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem;text-align:center;position:relative;overflow:hidden">
+
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+                    width:600px;height:600px;
+                    background:radial-gradient(circle,rgba(248,120,120,0.06) 0%,transparent 65%);
+                    border-radius:50%;filter:blur(80px)"></div>
+    </div>
+
+    <div style="position:relative;z-index:1;max-width:480px">
+        <p aria-hidden="true"
+           style="font-family:var(--font-display);font-size:7rem;font-weight:800;
+                  line-height:1;margin:0 0 1rem;
+                  background:linear-gradient(135deg,rgba(248,120,120,0.5),rgba(248,120,120,0.15));
+                  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+                  background-clip:text">
+            {{ status_code }}
+        </p>
+
+        <h1 style="font-family:var(--font-display);font-size:1.875rem;font-weight:800;
+                   color:var(--color-text);margin:0 0 1rem;letter-spacing:-0.02em">
+            {% if status_code == 500 %}
+                {{ 'error.500_title'|trans }}
+            {% else %}
+                {{ 'error.error_code'|trans({'%code%': status_code}) }}
+            {% endif %}
+        </h1>
+
+        <p style="font-size:1rem;color:var(--color-muted);line-height:1.6;margin:0 0 2.5rem">
+            {% if status_code == 500 %}
+                {{ 'error.500_desc'|trans }}
+            {% else %}
+                {{ 'error.404_desc'|trans }}
+            {% endif %}
+        </p>
+
+        <a href="{{ path('app_home') }}" class="btn-primary">
+            {{ 'error.back_home'|trans }}
+        </a>
+    </div>
+</div>
+{% endblock %}
