@@ -5,9 +5,14 @@ app:
 nav:
     skip_to_content: "Aller au contenu principal"
     main: "Navigation principale"
+    home: "Accueil"
     login: "Connexion"
     register: "S'inscrire"
     logout: "Se déconnecter"
+    language: "Choisir la langue"
+    user_menu: "Menu utilisateur"
+    open_menu: "Ouvrir le menu"
+    close_menu: "Fermer le menu"
 
 home:
     title: "Accueil"
@@ -52,4 +57,13 @@ form:
     password_min: "Le mot de passe doit contenir au moins {{ limit }} caractères."
 
 footer:
+    tagline: "Starter Symfony 7.4 production-ready — auth, i18n, CI, sécurité."
     built_with: "Construit avec Symfony 7.4 & Tailwind v4"
+    all_rights: "Tous droits réservés."
+    nav_title: "Navigation"
+    legal_title: "Légal"
+    legal_mentions: "Mentions légales"
+    legal_privacy: "Politique de confidentialité"
+    legal_cgu: "Conditions d'utilisation"
+    legal_cookies: "Gestion des cookies"
+    contact_title: "Contact"

@@ -5,9 +5,14 @@ app:
 nav:
     skip_to_content: "Skip to main content"
     main: "Main navigation"
+    home: "Home"
     login: "Sign in"
     register: "Sign up"
     logout: "Sign out"
+    language: "Choose language"
+    user_menu: "User menu"
+    open_menu: "Open menu"
+    close_menu: "Close menu"
 
 home:
     title: "Home"
@@ -52,4 +57,13 @@ form:
     password_min: "Password must be at least {{ limit }} characters."
 
 footer:
+    tagline: "Production-ready Symfony 7.4 starter — auth, i18n, CI, security."
     built_with: "Built with Symfony 7.4 & Tailwind v4"
+    all_rights: "All rights reserved."
+    nav_title: "Navigation"
+    legal_title: "Legal"
+    legal_mentions: "Legal notice"
+    legal_privacy: "Privacy policy"
+    legal_cgu: "Terms of service"
+    legal_cookies: "Cookie settings"
+    contact_title: "Contact"
