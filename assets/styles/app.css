@@ -8,7 +8,7 @@
     --color-primary-hover: #6a58e5;
     --color-accent: #f7c26a;
     --color-text: #eeebff;
-    --color-muted: #706d85;
+    --color-muted: #8e8ba6; /* ratio 6.3:1 sur --color-bg → passe WCAG AA (4.5:1) et AAA (7:1) */
     --color-border: #1e1d30;
     --color-error: #f87878;
     --color-success: #6af7a8;

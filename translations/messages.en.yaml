@@ -73,3 +73,11 @@ legal:
     last_updated: "Last updated"
     last_updated_date: "May 3, 2026"
     mentions_intro: "Mandatory legal information about the publisher and hosting of the BaseApp website."
+
+error:
+    404_title: "Page not found"
+    404_desc: "The page you are looking for does not exist or has been moved."
+    500_title: "Server error"
+    500_desc: "An unexpected error occurred. Please try again in a moment."
+    back_home: "Back to home"
+    error_code: "Error %code%"

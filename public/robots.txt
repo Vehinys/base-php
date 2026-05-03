@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+
+# Exclure les routes fonctionnelles (pas de contenu indexable)
+Disallow: /login
+Disallow: /register
+Disallow: /logout
+Disallow: /connect/
+Disallow: /locale/
+Disallow: /_profiler/
+Disallow: /_wdt/
+
+Sitemap: https://baseapp.dev/sitemap.xml

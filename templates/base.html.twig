@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ 'app.name'|trans }}{% endblock %}</title>
     <meta name="description" content="{% block description %}{{ 'app.description'|trans }}{% endblock %}">
+    <meta name="robots" content="{% block robots %}index,follow{% endblock %}">
+    <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +16,13 @@
     <meta property="og:title" content="{% block og_title %}{{ 'app.name'|trans }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ 'app.description'|trans }}{% endblock %}">
     <meta property="og:type" content="website">
-    <link rel="canonical" href="{{ app.request.uri }}">
+    <meta property="og:url" content="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
+    <meta property="og:image" content="{% block og_image %}{{ absolute_url(asset('favicon.svg')) }}{% endblock %}">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="{{ block('og_title') }}">
+    <meta name="twitter:description" content="{{ block('og_description') }}">
+    {# canonical sans query string — évite le duplicate content pour les URLs paginées #}
+    <link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
 
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
@@ -101,14 +109,18 @@
                             <span style="max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
                                 {{ app.user.name ?? app.user.email }}
                             </span>
-                            <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+                            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M2 4l4 4 4-4"/>
                             </svg>
                         </button>
                         <div class="user-dropdown-panel" role="menu">
-                            <a href="{{ path('app_logout') }}" class="dropdown-item" role="menuitem">
-                                {{ 'nav.logout'|trans }}
-                            </a>
+                            {# POST obligatoire pour le logout — CSRF requis via security.yaml #}
+                            <form method="post" action="{{ path('app_logout') }}">
+                                <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                                <button type="submit" class="dropdown-item" role="menuitem">
+                                    {{ 'nav.logout'|trans }}
+                                </button>
+                            </form>
                         </div>
                     </div>
                 {% else %}
@@ -130,6 +142,8 @@
                     aria-controls="mobileMenu"
                     aria-expanded="false"
                     aria-label="{{ 'nav.open_menu'|trans }}"
+                    data-label-open="{{ 'nav.open_menu'|trans }}"
+                    data-label-close="{{ 'nav.close_menu'|trans }}"
                     style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px">
                 <span style="display:block;width:22px;height:2px;background:var(--color-text);border-radius:2px;transition:transform 0.2s"></span>
                 <span style="display:block;width:22px;height:2px;background:var(--color-text);border-radius:2px;transition:opacity 0.2s"></span>
@@ -149,10 +163,13 @@
                 <span style="padding:0.625rem 0;font-size:0.875rem;color:var(--color-muted);border-bottom:1px solid var(--color-border)">
                     {{ app.user.name ?? app.user.email }}
                 </span>
-                <a href="{{ path('app_logout') }}"
-                   style="padding:0.625rem 0;font-size:0.875rem;color:var(--color-muted);text-decoration:none">
-                    {{ 'nav.logout'|trans }}
-                </a>
+                <form method="post" action="{{ path('app_logout') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+                    <button type="submit"
+                            style="padding:0.625rem 0;font-size:0.875rem;color:var(--color-muted);background:none;border:none;cursor:pointer;width:100%;text-align:left">
+                        {{ 'nav.logout'|trans }}
+                    </button>
+                </form>
             {% else %}
                 <a href="{{ path('app_login') }}"
                    style="padding:0.625rem 0;font-size:0.9375rem;color:var(--color-muted);text-decoration:none;border-bottom:1px solid var(--color-border)">
@@ -218,9 +235,10 @@
 
             {# Colonne 2 — Navigation #}
             <nav aria-label="{{ 'footer.nav_title'|trans }}">
-                <h2 style="font-family:var(--font-display);font-size:0.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text);margin-bottom:1rem">
+                {# aria-hidden : le nav a déjà un aria-label identique — évite la redondance pour les lecteurs d'écran #}
+                <p style="font-family:var(--font-display);font-size:0.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text);margin-bottom:1rem" aria-hidden="true">
                     {{ 'footer.nav_title'|trans }}
-                </h2>
+                </p>
                 <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.625rem">
                     <li>
                         <a href="{{ path('app_home') }}"
@@ -251,9 +269,9 @@
 
             {# Colonne 3 — Légal #}
             <nav aria-label="{{ 'footer.legal_title'|trans }}">
-                <h2 style="font-family:var(--font-display);font-size:0.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text);margin-bottom:1rem">
+                <p style="font-family:var(--font-display);font-size:0.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text);margin-bottom:1rem" aria-hidden="true">
                     {{ 'footer.legal_title'|trans }}
-                </h2>
+                </p>
                 <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.625rem">
                     <li>
                         <a href="{{ path('legal_mentions') }}"
@@ -292,9 +310,9 @@
 
             {# Colonne 4 — Contact #}
             <div>
-                <h2 style="font-family:var(--font-display);font-size:0.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text);margin-bottom:1rem">
+                <p style="font-family:var(--font-display);font-size:0.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text);margin-bottom:1rem">
                     {{ 'footer.contact_title'|trans }}
-                </h2>
+                </p>
                 <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.625rem">
                     <li>
                         <a href="mailto:contact@baseapp.dev"
@@ -344,27 +362,6 @@
         {{ encore_entry_script_tags('app') }}
     {% endblock %}
 
-    <script>
-    // Menu mobile
-    (function () {
-        var btn = document.getElementById('mobileMenuBtn');
-        var menu = document.getElementById('mobileMenu');
-        if (!btn || !menu) return;
-        btn.addEventListener('click', function () {
-            var isOpen = menu.classList.toggle('open');
-            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            btn.setAttribute('aria-label', isOpen ? '{{ 'nav.close_menu'|trans }}' : '{{ 'nav.open_menu'|trans }}');
-        });
-    }());
-
-    // Fermer le dropdown user en cliquant ailleurs
-    document.addEventListener('click', function (e) {
-        var dropdown = document.getElementById('userDropdown');
-        if (dropdown && !dropdown.contains(e.target)) {
-            dropdown.classList.remove('open');
-        }
-    });
-
-    </script>
+    {# Logique menu mobile et dropdown déplacée dans assets/app.js (compilé par Webpack Encore) #}
 </body>
 </html>

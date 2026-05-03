@@ -73,3 +73,11 @@ legal:
     last_updated: "Dernière mise à jour"
     last_updated_date: "3 mai 2026"
     mentions_intro: "Informations légales obligatoires concernant l'éditeur et l'hébergement du site BaseApp."
+
+error:
+    404_title: "Page introuvable"
+    404_desc: "La page que vous cherchez n'existe pas ou a été déplacée."
+    500_title: "Erreur serveur"
+    500_desc: "Une erreur inattendue s'est produite. Réessayez dans quelques instants."
+    back_home: "Retour à l'accueil"
+    error_code: "Erreur %code%"
