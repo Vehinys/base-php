@@ -1,0 +1,78 @@
+{% extends 'legal/_layout.html.twig' %}
+
+{% block title %}{{ 'footer.legal_mentions'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+
+{% block legal_content %}
+<h1>{{ 'footer.legal_mentions'|trans }}</h1>
+<p class="subtitle">{{ 'legal.mentions_intro'|trans }}</p>
+
+<h2 id="editeur">1. Éditeur du site</h2>
+<p>
+    Le site <strong>BaseApp</strong> est édité par :<br>
+    <strong>Albert Lecomte</strong><br>
+    Développeur web indépendant<br>
+    France<br>
+    E-mail : <a href="mailto:contact@baseapp.dev">contact@baseapp.dev</a>
+</p>
+<p>
+    Directeur de la publication : <strong>Albert Lecomte</strong>
+</p>
+
+<h2 id="hebergeur">2. Hébergement</h2>
+<p>
+    Ce site est hébergé localement en environnement de développement via <strong>Laragon</strong>.<br>
+    En production, l'hébergement sera assuré par un prestataire tiers dont les coordonnées
+    seront précisées lors du déploiement.
+</p>
+
+<h2 id="propriete">3. Propriété intellectuelle</h2>
+<p>
+    L'ensemble des contenus présents sur ce site (textes, images, graphismes, logos, icônes, sons, logiciels)
+    est la propriété exclusive de <strong>BaseApp</strong>, sauf mention contraire, et est protégé par
+    les lois françaises et internationales relatives à la propriété intellectuelle.
+</p>
+<p>
+    Toute reproduction, représentation, modification, publication, adaptation ou exploitation
+    de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé,
+    est interdite, sauf autorisation écrite préalable.
+</p>
+<p>
+    Ce projet est basé sur <strong>Symfony</strong> (licence MIT) et <strong>Tailwind CSS</strong> (licence MIT).
+    Les licences de ces projets open source sont disponibles dans le dépôt GitHub.
+</p>
+
+<h2 id="responsabilite">4. Limitation de responsabilité</h2>
+<p>
+    BaseApp s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées sur ce site.
+    Toutefois, BaseApp ne peut garantir l'exactitude, la précision ou l'exhaustivité des informations
+    mises à disposition sur ce site et décline toute responsabilité pour toute imprécision,
+    inexactitude ou omission portant sur des informations disponibles sur ce site.
+</p>
+<p>
+    BaseApp ne saurait être tenue responsable des dommages directs ou indirects résultant
+    de l'accès au site ou de son utilisation, notamment en ce qui concerne les problèmes
+    techniques, les interruptions de service ou toute perte de données.
+</p>
+
+<h2 id="liens">5. Liens hypertextes</h2>
+<p>
+    Le site peut contenir des liens vers d'autres sites web. BaseApp n'est pas responsable
+    des contenus de ces sites tiers et ne peut être tenu pour responsable des dommages
+    ou préjudices pouvant résulter de la consultation de ces sites.
+</p>
+<p>
+    La création de liens vers ce site est autorisée sous réserve que les liens renvoient
+    vers la page d'accueil ou une page légitime du site et n'utilisent pas des pratiques
+    pouvant induire l'utilisateur en erreur.
+</p>
+
+<h2 id="droit">6. Droit applicable</h2>
+<p>
+    Le présent site et ses mentions légales sont soumis au droit français.
+    En cas de litige, les tribunaux français seront seuls compétents.
+</p>
+<p>
+    Pour toute question relative aux présentes mentions légales, vous pouvez nous contacter à :
+    <a href="mailto:contact@baseapp.dev">contact@baseapp.dev</a>
+</p>
+{% endblock %}

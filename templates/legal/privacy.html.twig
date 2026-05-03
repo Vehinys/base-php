@@ -1,0 +1,143 @@
+{% extends 'legal/_layout.html.twig' %}
+
+{% block title %}{{ 'footer.legal_privacy'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+
+{% block legal_content %}
+<h1>{{ 'footer.legal_privacy'|trans }}</h1>
+<p class="subtitle">
+    Cette politique explique quelles données personnelles BaseApp collecte, pourquoi,
+    comment elles sont utilisées et quels sont vos droits conformément au
+    Règlement Général sur la Protection des Données (RGPD — UE 2016/679).
+</p>
+
+<div class="info-box">
+    <p>
+        <strong>En résumé :</strong> Nous collectons uniquement les données nécessaires
+        au fonctionnement du service. Nous ne vendons jamais vos données. Vous pouvez
+        demander la suppression de votre compte à tout moment.
+    </p>
+</div>
+
+<h2 id="responsable">1. Responsable du traitement</h2>
+<p>
+    <strong>Albert Lecomte</strong> — BaseApp<br>
+    E-mail : <a href="mailto:contact@baseapp.dev">contact@baseapp.dev</a><br>
+    France
+</p>
+
+<h2 id="donnees">2. Données collectées</h2>
+
+<h3>2.1 Inscription par e-mail / mot de passe</h3>
+<ul>
+    <li><strong>Nom complet</strong> — fourni volontairement à l'inscription</li>
+    <li><strong>Adresse e-mail</strong> — identifiant unique du compte</li>
+    <li><strong>Mot de passe</strong> — stocké sous forme de hash argon2 (non lisible)</li>
+    <li><strong>Date de création du compte</strong></li>
+</ul>
+
+<h3>2.2 Connexion via Google OAuth</h3>
+<p>Si vous utilisez "Continuer avec Google", nous recevons depuis Google :</p>
+<ul>
+    <li>Identifiant Google (opaque, non réutilisable hors de ce service)</li>
+    <li>Adresse e-mail</li>
+    <li>Nom complet</li>
+    <li>URL de la photo de profil</li>
+</ul>
+
+<h3>2.3 Connexion via Discord OAuth</h3>
+<p>Si vous utilisez "Continuer avec Discord", nous recevons depuis Discord :</p>
+<ul>
+    <li>Identifiant Discord</li>
+    <li>Nom d'utilisateur Discord</li>
+    <li>Adresse e-mail (si autorisée dans les permissions Discord)</li>
+    <li>Hash de l'avatar (utilisé pour construire l'URL de la photo)</li>
+</ul>
+
+<h3>2.4 Données techniques</h3>
+<ul>
+    <li>Journaux de connexion (adresse IP, horodatage) — conservés 30 jours</li>
+    <li>Cookies de session (voir la <a href="{{ path('legal_cookies') }}">politique cookies</a>)</li>
+</ul>
+
+<h2 id="finalites">3. Finalités et bases légales</h2>
+<table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-bottom:1rem">
+    <thead>
+        <tr style="border-bottom:2px solid var(--color-border)">
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Finalité</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Base légale</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Durée</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="border-bottom:1px solid var(--color-border)">
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Création et gestion du compte</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Exécution du contrat</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Durée de vie du compte</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--color-border)">
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Authentification sécurisée</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Intérêt légitime (sécurité)</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Session active</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--color-border)">
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Journaux de sécurité</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Obligation légale / Intérêt légitime</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">30 jours</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 id="partage">4. Partage des données</h2>
+<p>
+    Vos données personnelles <strong>ne sont pas vendues, louées ou cédées</strong> à des tiers.
+</p>
+<p>Elles peuvent être transmises uniquement à :</p>
+<ul>
+    <li><strong>Google LLC</strong> — pour le flux d'authentification OAuth (soumis à la
+        <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">politique de confidentialité Google</a>)</li>
+    <li><strong>Discord Inc.</strong> — pour le flux d'authentification OAuth (soumis à la
+        <a href="https://discord.com/privacy" target="_blank" rel="noopener noreferrer">politique de confidentialité Discord</a>)</li>
+    <li><strong>Hébergeur</strong> — pour le fonctionnement technique du service (voir mentions légales)</li>
+    <li><strong>Autorités compétentes</strong> — si requis par la loi</li>
+</ul>
+
+<h2 id="securite">5. Sécurité</h2>
+<p>
+    Nous mettons en œuvre des mesures techniques et organisationnelles appropriées :
+</p>
+<ul>
+    <li>Hachage des mots de passe avec <strong>argon2</strong></li>
+    <li>Communications chiffrées via <strong>HTTPS / TLS</strong> en production</li>
+    <li>Sessions <strong>httpOnly</strong>, <strong>secure</strong> et <strong>sameSite=lax</strong></li>
+    <li>Protection <strong>CSRF</strong> sur tous les formulaires</li>
+    <li>En-têtes de sécurité : CSP, HSTS, X-Frame-Options, X-Content-Type-Options</li>
+</ul>
+
+<h2 id="droits">6. Vos droits (RGPD)</h2>
+<p>Conformément au RGPD, vous disposez des droits suivants :</p>
+<ul>
+    <li><strong>Droit d'accès</strong> — obtenir une copie de vos données</li>
+    <li><strong>Droit de rectification</strong> — corriger des données inexactes</li>
+    <li><strong>Droit à l'effacement</strong> — demander la suppression de votre compte et de vos données</li>
+    <li><strong>Droit à la portabilité</strong> — recevoir vos données dans un format structuré</li>
+    <li><strong>Droit d'opposition</strong> — s'opposer au traitement fondé sur l'intérêt légitime</li>
+    <li><strong>Droit à la limitation</strong> — limiter temporairement le traitement</li>
+</ul>
+<p>
+    Pour exercer ces droits, contactez-nous à <a href="mailto:contact@baseapp.dev">contact@baseapp.dev</a>.
+    Nous répondrons dans un délai d'un mois. Vous pouvez également introduire une réclamation
+    auprès de la <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">CNIL</a>.
+</p>
+
+<h2 id="cookies">7. Cookies</h2>
+<p>
+    Pour le détail des cookies utilisés, consultez notre
+    <a href="{{ path('legal_cookies') }}">politique de gestion des cookies</a>.
+</p>
+
+<h2 id="modifications">8. Modifications</h2>
+<p>
+    Cette politique peut être mise à jour. La date de dernière modification est indiquée en haut de cette page.
+    En cas de modification substantielle, les utilisateurs seront informés par e-mail.
+</p>
+{% endblock %}

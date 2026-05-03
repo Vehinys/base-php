@@ -67,3 +67,9 @@ footer:
     legal_cgu: "Conditions d'utilisation"
     legal_cookies: "Gestion des cookies"
     contact_title: "Contact"
+
+legal:
+    nav_title: "Documents légaux"
+    last_updated: "Dernière mise à jour"
+    last_updated_date: "3 mai 2026"
+    mentions_intro: "Informations légales obligatoires concernant l'éditeur et l'hébergement du site BaseApp."

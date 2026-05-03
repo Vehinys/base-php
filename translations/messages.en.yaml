@@ -67,3 +67,9 @@ footer:
     legal_cgu: "Terms of service"
     legal_cookies: "Cookie settings"
     contact_title: "Contact"
+
+legal:
+    nav_title: "Legal documents"
+    last_updated: "Last updated"
+    last_updated_date: "May 3, 2026"
+    mentions_intro: "Mandatory legal information about the publisher and hosting of the BaseApp website."

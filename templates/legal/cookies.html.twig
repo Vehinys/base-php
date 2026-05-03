@@ -1,0 +1,130 @@
+{% extends 'legal/_layout.html.twig' %}
+
+{% block title %}{{ 'footer.legal_cookies'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+
+{% block legal_content %}
+<h1>{{ 'footer.legal_cookies'|trans }}</h1>
+<p class="subtitle">
+    Cette page vous explique ce que sont les cookies, lesquels sont utilisés par BaseApp,
+    pourquoi, et comment vous pouvez les gérer.
+</p>
+
+<div class="info-box">
+    <p>
+        <strong>Important :</strong> BaseApp n'utilise que des cookies <strong>strictement nécessaires</strong>
+        au fonctionnement du service. Aucun cookie publicitaire, aucun suivi tiers,
+        aucune transmission de données à des régies publicitaires.
+    </p>
+</div>
+
+<h2 id="definition">1. Qu'est-ce qu'un cookie ?</h2>
+<p>
+    Un cookie est un petit fichier texte déposé sur votre terminal (ordinateur, smartphone, tablette)
+    lors de votre visite sur un site web. Il permet au site de mémoriser des informations
+    sur votre visite, comme votre préférence de langue ou votre statut de connexion.
+</p>
+<p>
+    Les cookies ne peuvent pas accéder aux fichiers de votre ordinateur, ni contenir
+    des virus ou logiciels malveillants.
+</p>
+
+<h2 id="utilises">2. Cookies utilisés par BaseApp</h2>
+
+<h3>2.1 Cookie de session (obligatoire)</h3>
+<table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-bottom:1rem">
+    <thead>
+        <tr style="border-bottom:2px solid var(--color-border)">
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Nom</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Finalité</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Durée</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr style="border-bottom:1px solid var(--color-border)">
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted);font-family:monospace">PHPSESSID</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Maintenir la session utilisateur</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Session (fermé à la fermeture du navigateur)</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Technique</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--color-border)">
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted);font-family:monospace">REMEMBERME</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Maintenir la connexion ("Se souvenir de moi")</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">7 jours</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Technique</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>2.2 Token CSRF (obligatoire)</h3>
+<p>
+    Des jetons CSRF (Cross-Site Request Forgery) sont stockés en session pour
+    protéger les formulaires contre les attaques. Ces données ne sont pas des cookies
+    à proprement parler mais des données de session côté serveur.
+</p>
+
+<h3>2.3 Préférence de langue</h3>
+<table style="width:100%;border-collapse:collapse;font-size:0.875rem;margin-bottom:1rem">
+    <thead>
+        <tr style="border-bottom:2px solid var(--color-border)">
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Nom</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Finalité</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Durée</th>
+            <th style="text-align:left;padding:0.5rem 0.75rem;color:var(--color-text);font-weight:600">Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted);font-family:monospace">_locale</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Mémoriser votre choix de langue (FR/EN)</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Session</td>
+            <td style="padding:0.625rem 0.75rem;color:var(--color-muted)">Fonctionnel</td>
+        </tr>
+    </tbody>
+</table>
+
+<h3>2.4 Cookies tiers</h3>
+<p>
+    BaseApp n'intègre <strong>aucun cookie tiers</strong> à des fins publicitaires ou de tracking.
+</p>
+<p>
+    Lors de l'utilisation des boutons de connexion Google ou Discord, ces services déposent
+    leurs propres cookies sur votre terminal conformément à leurs politiques respectives.
+    Ces cookies ne sont activés qu'au moment où vous cliquez sur les boutons correspondants.
+</p>
+
+<h2 id="base-legale">3. Base légale</h2>
+<p>
+    Les cookies strictement nécessaires (session, CSRF) sont déposés sans votre consentement
+    préalable car ils sont indispensables au fonctionnement du service, conformément à
+    l'article 82 de la loi Informatique et Libertés et aux recommandations de la CNIL.
+</p>
+
+<h2 id="gerer">4. Comment gérer les cookies ?</h2>
+
+<h3>4.1 Via votre navigateur</h3>
+<p>
+    Vous pouvez configurer votre navigateur pour refuser ou supprimer les cookies.
+    Attention : la désactivation des cookies de session empêchera toute connexion au service.
+</p>
+<ul>
+    <li><a href="https://support.google.com/chrome/answer/95647" target="_blank" rel="noopener noreferrer">Google Chrome</a></li>
+    <li><a href="https://support.mozilla.org/fr/kb/protection-renforcee-contre-pistage-firefox" target="_blank" rel="noopener noreferrer">Mozilla Firefox</a></li>
+    <li><a href="https://support.apple.com/fr-fr/guide/safari/sfri11471/mac" target="_blank" rel="noopener noreferrer">Apple Safari</a></li>
+    <li><a href="https://support.microsoft.com/fr-fr/microsoft-edge/supprimer-les-cookies-dans-microsoft-edge" target="_blank" rel="noopener noreferrer">Microsoft Edge</a></li>
+</ul>
+
+<h3>4.2 Opt-out Google Analytics</h3>
+<p>
+    BaseApp n'utilise pas Google Analytics. Cette section est sans objet.
+</p>
+
+<h2 id="contact">5. Contact</h2>
+<p>
+    Pour toute question sur notre gestion des cookies :
+    <a href="mailto:contact@baseapp.dev">contact@baseapp.dev</a><br>
+    Vous pouvez également consulter le site de la
+    <a href="https://www.cnil.fr/fr/cookies-et-autres-traceurs" target="_blank" rel="noopener noreferrer">CNIL</a>
+    pour plus d'informations sur vos droits.
+</p>
+{% endblock %}
