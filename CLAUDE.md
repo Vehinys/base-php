@@ -6,7 +6,7 @@
 - **Auth** : email/password (Argon2) + OAuth Google + OAuth Discord (KnpU OAuth2 Client Bundle)
 - **CSS** : Tailwind v4 via Webpack Encore + PostCSS
 - **i18n** : symfony/translation — FR (défaut) + EN — session + Accept-Language
-- **Tests** : PHPUnit unit + functional + Panther e2e
+- **Tests** : PHPUnit unit + functional (Panther e2e remplacé par WebTestCase)
 - **CI** : GitHub Actions (`.github/workflows/ci.yml`)
 - **Qualité** : PHPStan level 6 + PHP-CS-Fixer (@Symfony risky)
 
@@ -56,8 +56,10 @@ php bin/console translation:extract --force --locale en
 - **Composer** : `php /c/laragon/bin/composer/composer-new.phar <cmd>` si `composer` n'est pas en PATH
 - **npm** : ajouter `/c/Program Files/nodejs` au PATH si npm introuvable
 - **OAuth Discord** : package `wohali/oauth2-discord-new` — méthode `getAvatarUrl()` à vérifier si l'API Discord change
-- **Panther e2e** : nécessite ChromeDriver compatible avec Chrome installé — `vendor/bin/bdi detect drivers`
 - **CSP** : si ajout de CDN externe, mettre à jour `config/packages/nelmio_security.yaml`
+- **login_throttling** : 5 tentatives / 15 min — nécessite `symfony/rate-limiter` (déjà installé)
+- **Sitemap** : route `/sitemap.xml` — ajouter les nouvelles pages indexables dans `SitemapController`
+- **Erreurs** : pages 404/500 dans `templates/bundles/TwigBundle/Exception/`
 - **Locale** : `LocaleSubscriber` priorité 20 sur `KernelEvents::REQUEST` — avant le firewall (prio 8)
 
 ## Standards actifs
