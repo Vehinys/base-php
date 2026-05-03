@@ -1,16 +1,16 @@
 @import "tailwindcss";
 
 @theme {
-    --color-bg: #0a0a0f;
-    --color-surface: #12121a;
-    --color-surface-2: #1a1a26;
+    --color-bg: #080810;
+    --color-surface: #0f0f1d;
+    --color-surface-2: #161628;
     --color-primary: #7c6af7;
     --color-primary-hover: #6a58e5;
     --color-accent: #f7c26a;
-    --color-text: #e8e6f0;
-    --color-muted: #6b6880;
-    --color-border: #2a2838;
-    --color-error: #f77c7c;
+    --color-text: #eeebff;
+    --color-muted: #706d85;
+    --color-border: #1e1d30;
+    --color-error: #f87878;
     --color-success: #6af7a8;
 
     --font-display: 'Syne', sans-serif;
@@ -23,6 +23,20 @@
         background-color: var(--color-bg);
         color: var(--color-text);
         scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Grain texture overlay */
+    body::after {
+        content: '';
+        position: fixed;
+        inset: 0;
+        z-index: 9998;
+        pointer-events: none;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-size: 200px 200px;
     }
 
     *:focus-visible {
@@ -40,28 +54,75 @@
 }
 
 @layer components {
+
+    /* ─── BOUTONS ─────────────────────────────────── */
+
     .btn-primary {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        padding: 0.625rem 1.5rem;
-        background-color: var(--color-primary);
+        padding: 0.6875rem 1.625rem;
+        background: linear-gradient(135deg, #7c6af7 0%, #9b8bf9 100%);
         color: #fff;
         font-weight: 600;
-        border-radius: 0.5rem;
+        font-size: 0.9375rem;
+        letter-spacing: 0.01em;
+        border-radius: 0.75rem;
         border: none;
         cursor: pointer;
-        transition: background-color 0.2s, transform 0.15s;
+        text-decoration: none;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.15s, box-shadow 0.2s;
+    }
+
+    /* Shimmer sweep on hover */
+    .btn-primary::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+        transform: translateX(-120%) skewX(-15deg);
+        transition: transform 0.5s;
     }
 
     .btn-primary:hover {
-        background-color: var(--color-primary-hover);
-        transform: translateY(-1px);
+        transform: translateY(-2px);
+        box-shadow: 0 0 32px rgba(124,106,247,0.5), 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .btn-primary:hover::before {
+        transform: translateX(120%) skewX(-15deg);
     }
 
     .btn-primary:active {
         transform: translateY(0);
+        box-shadow: 0 0 16px rgba(124,106,247,0.3);
+    }
+
+    .btn-ghost {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.6875rem 1.5rem;
+        color: var(--color-muted);
+        font-weight: 500;
+        font-size: 0.9375rem;
+        border-radius: 0.75rem;
+        border: 1px solid var(--color-border);
+        cursor: pointer;
+        text-decoration: none;
+        background: transparent;
+        transition: color 0.15s, border-color 0.2s, background 0.2s;
+        letter-spacing: 0.01em;
+    }
+
+    .btn-ghost:hover {
+        color: var(--color-text);
+        border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+        background: color-mix(in srgb, var(--color-primary) 6%, transparent);
     }
 
     .btn-oauth {
@@ -70,59 +131,263 @@
         justify-content: center;
         gap: 0.625rem;
         width: 100%;
-        padding: 0.625rem 1rem;
-        background-color: var(--color-surface-2);
+        padding: 0.75rem 1rem;
+        background: var(--color-surface-2);
         color: var(--color-text);
         font-weight: 500;
-        border-radius: 0.5rem;
+        font-size: 0.9375rem;
+        border-radius: 0.75rem;
         border: 1px solid var(--color-border);
         cursor: pointer;
         text-decoration: none;
-        transition: background-color 0.2s, border-color 0.2s;
+        transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
     }
 
     .btn-oauth:hover {
-        background-color: var(--color-surface);
-        border-color: var(--color-primary);
+        background: color-mix(in srgb, var(--color-primary) 7%, var(--color-surface-2));
+        border-color: color-mix(in srgb, var(--color-primary) 35%, var(--color-border));
+        box-shadow: 0 0 16px rgba(124,106,247,0.12);
+    }
+
+    /* ─── FORMULAIRES ─────────────────────────────── */
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.4375rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: color-mix(in srgb, var(--color-text) 80%, transparent);
+        letter-spacing: 0.01em;
     }
 
     .form-input {
         width: 100%;
-        padding: 0.625rem 0.875rem;
-        background-color: var(--color-surface-2);
+        padding: 0.75rem 1rem;
+        background: color-mix(in srgb, var(--color-primary) 4%, var(--color-surface-2));
         color: var(--color-text);
         border: 1px solid var(--color-border);
-        border-radius: 0.5rem;
+        border-radius: 0.75rem;
         font-size: 0.9375rem;
-        transition: border-color 0.2s;
+        font-family: var(--font-body);
+        transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+
+    .form-input::placeholder {
+        color: var(--color-muted);
     }
 
     .form-input:focus {
         border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(124,106,247,0.18);
+        background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface-2));
         outline: none;
     }
 
-    .form-label {
-        display: block;
-        margin-bottom: 0.375rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: var(--color-muted);
-    }
+    /* ─── CARTES ──────────────────────────────────── */
 
     .card {
-        background-color: var(--color-surface);
+        background: var(--color-surface);
         border: 1px solid var(--color-border);
-        border-radius: 1rem;
+        border-radius: 1.25rem;
         padding: 2rem;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
     }
+
+    /* Carte avec bordure dégradée */
+    .card-gradient {
+        position: relative;
+        border-radius: 1.25rem;
+        background: var(--color-surface);
+        padding: 2rem;
+        box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+        isolation: isolate;
+    }
+
+    .card-gradient::before {
+        content: '';
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        background: linear-gradient(
+            135deg,
+            rgba(124,106,247,0.45) 0%,
+            rgba(255,255,255,0.04) 50%,
+            rgba(247,194,106,0.2) 100%
+        );
+        z-index: -1;
+    }
+
+    /* Carte de feature avec hover */
+    .feature-card {
+        position: relative;
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: 1.25rem;
+        padding: 2rem;
+        overflow: hidden;
+        transition: transform 0.22s, border-color 0.22s, box-shadow 0.22s;
+        box-shadow: 0 4px 24px rgba(0,0,0,0.28);
+    }
+
+    /* Ligne de glow en haut de la carte */
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 20%; right: 20%;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+        opacity: 0;
+        transition: opacity 0.3s, left 0.3s, right 0.3s;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+        border-color: color-mix(in srgb, var(--color-primary) 28%, var(--color-border));
+        box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,106,247,0.12);
+    }
+
+    .feature-card:hover::after {
+        opacity: 1;
+        left: 0;
+        right: 0;
+    }
+
+    /* ─── ALERTES ─────────────────────────────────── */
 
     .alert-error {
         padding: 0.75rem 1rem;
-        background-color: color-mix(in srgb, var(--color-error) 15%, transparent);
-        border: 1px solid var(--color-error);
-        border-radius: 0.5rem;
+        background: color-mix(in srgb, var(--color-error) 10%, transparent);
+        border: 1px solid color-mix(in srgb, var(--color-error) 35%, transparent);
+        border-radius: 0.75rem;
         color: var(--color-error);
         font-size: 0.875rem;
+    }
+
+    .alert-success {
+        padding: 0.75rem 1rem;
+        background: color-mix(in srgb, var(--color-success) 10%, transparent);
+        border: 1px solid color-mix(in srgb, var(--color-success) 35%, transparent);
+        border-radius: 0.75rem;
+        color: var(--color-success);
+        font-size: 0.875rem;
+    }
+
+    /* ─── BADGE ───────────────────────────────────── */
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.3125rem 0.875rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+        border: 1px solid color-mix(in srgb, var(--color-primary) 28%, transparent);
+        color: var(--color-primary);
+    }
+
+    /* ─── SÉPARATEUR ──────────────────────────────── */
+
+    .divider {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: var(--color-border);
+    }
+
+    .divider-text {
+        font-size: 0.75rem;
+        color: var(--color-muted);
+        white-space: nowrap;
+    }
+
+    /* ─── NAVIGATION (base.html.twig) ─────────────── */
+
+    .nav-mobile-menu { display: none; }
+
+    @media (max-width: 768px) {
+        .nav-desktop { display: none !important; }
+        .nav-hamburger { display: flex !important; }
+        .nav-mobile-menu.open { display: flex; }
+    }
+
+    .user-dropdown { position: relative; }
+
+    .user-dropdown-panel {
+        display: none;
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        min-width: 180px;
+        background: var(--color-surface-2);
+        border: 1px solid var(--color-border);
+        border-radius: 0.75rem;
+        padding: 0.375rem;
+        z-index: 50;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,106,247,0.08);
+    }
+
+    .user-dropdown.open .user-dropdown-panel { display: block; }
+
+    .dropdown-item {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        color: var(--color-muted);
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+        text-align: left;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .dropdown-item:hover {
+        background: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface));
+        color: var(--color-text);
+    }
+
+    /* ─── INFO BOX (pages légales) ────────────────── */
+
+    .info-box {
+        background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+        border: 1px solid color-mix(in srgb, var(--color-primary) 25%, transparent);
+        border-radius: 0.75rem;
+        padding: 1rem 1.25rem;
+        margin: 1.5rem 0;
+    }
+
+    .info-box p { margin: 0; color: var(--color-text); }
+
+    /* ─── RESPONSIVE FOOTER ──────────────────────── */
+
+    @media (max-width: 768px) {
+        footer .footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 2rem !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        footer .footer-grid {
+            grid-template-columns: 1fr !important;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * { transition: none !important; }
     }
 }

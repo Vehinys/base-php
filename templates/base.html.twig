@@ -20,50 +20,6 @@
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 
-    <style>
-        .nav-mobile-menu { display: none; }
-        @media (max-width: 768px) {
-            .nav-desktop { display: none; }
-            .nav-hamburger { display: flex; }
-            .nav-mobile-menu.open { display: flex; }
-        }
-        .user-dropdown { position: relative; }
-        .user-dropdown-panel {
-            display: none;
-            position: absolute;
-            top: calc(100% + 8px);
-            right: 0;
-            min-width: 180px;
-            background: var(--color-surface-2);
-            border: 1px solid var(--color-border);
-            border-radius: 0.5rem;
-            padding: 0.375rem;
-            z-index: 50;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-        }
-        .user-dropdown.open .user-dropdown-panel { display: block; }
-        .dropdown-item {
-            display: block;
-            width: 100%;
-            padding: 0.5rem 0.75rem;
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            color: var(--color-muted);
-            text-decoration: none;
-            transition: background 0.15s, color 0.15s;
-            text-align: left;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-        .dropdown-item:hover {
-            background: var(--color-surface);
-            color: var(--color-text);
-        }
-        @media (prefers-reduced-motion: reduce) {
-            * { transition: none !important; }
-        }
-    </style>
 </head>
 <body class="min-h-screen flex flex-col" style="background-color:var(--color-bg);color:var(--color-text)">
 
@@ -75,7 +31,7 @@
 
     {# ═══════════════════════════════════════════════════════ HEADER #}
     <header role="banner"
-            style="background-color:var(--color-surface);border-bottom:1px solid var(--color-border);position:sticky;top:0;z-index:40;backdrop-filter:blur(8px)">
+            style="background:rgba(15,15,29,0.82);border-bottom:1px solid rgba(124,106,247,0.12);position:sticky;top:0;z-index:40;backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%)">
         <nav role="navigation"
              aria-label="{{ 'nav.main'|trans }}"
              class="max-w-6xl mx-auto px-6"
@@ -232,7 +188,7 @@
             style="background-color:var(--color-surface);border-top:1px solid var(--color-border);margin-top:auto">
 
         {# Bloc principal #}
-        <div class="max-w-6xl mx-auto px-6 py-12"
+        <div class="max-w-6xl mx-auto px-6 py-12 footer-grid"
              style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem">
 
             {# Colonne 1 — Marque #}
@@ -409,12 +365,6 @@
         }
     });
 
-    // Fermeture footer responsive
-    (function () {
-        var style = document.createElement('style');
-        style.textContent = '@media (max-width: 768px) { footer [style*="grid-template-columns"] { grid-template-columns: 1fr 1fr !important; gap: 2rem !important; } }  @media (max-width: 480px) { footer [style*="grid-template-columns"] { grid-template-columns: 1fr !important; } }';
-        document.head.appendChild(style);
-    }());
     </script>
 </body>
 </html>

@@ -3,65 +3,148 @@
 {% block title %}{{ 'home.title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
 
 {% block body %}
-<section class="max-w-4xl mx-auto px-6 py-24 text-center">
-    <p class="text-sm font-semibold uppercase tracking-widest mb-4"
-       style="color:var(--color-primary);font-family:var(--font-display);letter-spacing:0.25em;
-              animation:fadeDown 0.6s ease both">
-        {{ 'home.tagline'|trans }}
-    </p>
 
-    <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6"
-        style="font-family:var(--font-display);animation:fadeUp 0.6s 0.1s ease both;opacity:0">
-        {{ 'home.headline'|trans }}
-    </h1>
+{# ═══════════════════════════════════════════════════ HERO #}
+<section class="relative overflow-hidden"
+         style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem">
 
-    <p class="text-lg max-w-xl mx-auto mb-10"
-       style="color:var(--color-muted);animation:fadeUp 0.6s 0.2s ease both;opacity:0">
-        {{ 'home.subtitle'|trans }}
-    </p>
+    {# Orbes de fond #}
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+        <div style="position:absolute;top:-10%;right:-8%;width:700px;height:700px;
+                    background:radial-gradient(circle,rgba(124,106,247,0.18) 0%,transparent 65%);
+                    border-radius:50%;filter:blur(60px)"></div>
+        <div style="position:absolute;bottom:-20%;left:-5%;width:550px;height:550px;
+                    background:radial-gradient(circle,rgba(247,194,106,0.1) 0%,transparent 65%);
+                    border-radius:50%;filter:blur(70px)"></div>
+        <div style="position:absolute;top:40%;left:15%;width:280px;height:280px;
+                    background:radial-gradient(circle,rgba(124,106,247,0.07) 0%,transparent 70%);
+                    border-radius:50%;filter:blur(40px)"></div>
+    </div>
 
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4"
-         style="animation:fadeUp 0.6s 0.3s ease both;opacity:0">
-        {% if app.user %}
-            <a href="#" class="btn-primary text-base px-8 py-3">
-                {{ 'home.cta_logged'|trans({ name: app.user.name ?? app.user.email }) }}
-            </a>
-        {% else %}
-            <a href="{{ path('app_register') }}" class="btn-primary text-base px-8 py-3">
-                {{ 'home.cta_register'|trans }}
-            </a>
-            <a href="{{ path('app_login') }}"
-               class="text-base font-medium transition-colors"
-               style="color:var(--color-muted)">
-                {{ 'home.cta_login'|trans }}
-            </a>
-        {% endif %}
+    {# Grille de points #}
+    <div aria-hidden="true"
+         style="position:absolute;inset:0;pointer-events:none;
+                background-image:radial-gradient(rgba(255,255,255,0.045) 1px,transparent 1px);
+                background-size:32px 32px;
+                mask-image:radial-gradient(ellipse 80% 80% at 50% 40%,black 0%,transparent 100%)"></div>
+
+    <div class="relative max-w-3xl mx-auto text-center" style="z-index:1">
+
+        <div style="animation:fadeDown 0.5s ease both;margin-bottom:2rem">
+            <span class="badge">
+                <svg width="7" height="7" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
+                {{ 'home.tagline'|trans }}
+            </span>
+        </div>
+
+        <h1 style="font-family:var(--font-display);
+                   font-size:clamp(2.75rem,8vw,5.5rem);
+                   font-weight:800;
+                   line-height:1.04;
+                   letter-spacing:-0.035em;
+                   margin-bottom:1.5rem;
+                   animation:fadeUp 0.6s 0.1s ease both;
+                   opacity:0">
+            <span style="background:linear-gradient(150deg,var(--color-text) 0%,rgba(220,215,255,0.7) 100%);
+                         -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+                {{ 'home.headline'|trans }}
+            </span>
+        </h1>
+
+        <p style="font-size:1.125rem;color:var(--color-muted);line-height:1.7;max-width:34rem;
+                  margin:0 auto 2.75rem;animation:fadeUp 0.6s 0.2s ease both;opacity:0">
+            {{ 'home.subtitle'|trans }}
+        </p>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem;
+                    animation:fadeUp 0.6s 0.3s ease both;opacity:0">
+            {% if app.user %}
+                <a href="#" class="btn-primary" style="font-size:1rem;padding:0.875rem 2.25rem">
+                    {{ 'home.cta_logged'|trans({ name: app.user.name ?? app.user.email }) }}
+                </a>
+            {% else %}
+                <a href="{{ path('app_register') }}" class="btn-primary" style="font-size:1rem;padding:0.875rem 2.25rem">
+                    {{ 'home.cta_register'|trans }}
+                </a>
+                <a href="{{ path('app_login') }}" class="btn-ghost" style="font-size:1rem;padding:0.875rem 1.75rem">
+                    {{ 'home.cta_login'|trans }}
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            {% endif %}
+        </div>
     </div>
 </section>
 
-<section class="max-w-5xl mx-auto px-6 pb-24"
-         aria-labelledby="features-heading">
+{# ═══════════════════════════════════════════════ FEATURES #}
+<section class="max-w-5xl mx-auto px-6 pb-28" aria-labelledby="features-heading">
     <h2 id="features-heading" class="sr-only">{{ 'home.features_title'|trans }}</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {% for feature in ['auth', 'i18n', 'security'] %}
-        <article class="card" style="animation:fadeUp 0.6s {{ 0.4 + loop.index0 * 0.1 }}s ease both;opacity:0">
-            <div class="text-2xl mb-4" aria-hidden="true">
-                {% if feature == 'auth' %}&#128274;{% elseif feature == 'i18n' %}&#127757;{% else %}&#128737;{% endif %}
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem">
+
+        <article class="feature-card" style="animation:fadeUp 0.6s 0.4s ease both;opacity:0">
+            <div style="width:48px;height:48px;border-radius:0.875rem;
+                        background:color-mix(in srgb,var(--color-primary) 14%,transparent);
+                        border:1px solid color-mix(in srgb,var(--color-primary) 28%,transparent);
+                        display:flex;align-items:center;justify-content:center;margin-bottom:1.375rem">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
             </div>
-            <h3 class="text-lg font-semibold mb-2" style="font-family:var(--font-display)">
-                {{ ('home.feature_' ~ feature ~ '_title')|trans }}
+            <h3 style="font-family:var(--font-display);font-size:1.0625rem;font-weight:700;
+                       color:var(--color-text);margin-bottom:0.625rem;line-height:1.3">
+                {{ 'home.feature_auth_title'|trans }}
             </h3>
-            <p class="text-sm" style="color:var(--color-muted)">
-                {{ ('home.feature_' ~ feature ~ '_desc')|trans }}
+            <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin:0">
+                {{ 'home.feature_auth_desc'|trans }}
             </p>
         </article>
-        {% endfor %}
+
+        <article class="feature-card" style="animation:fadeUp 0.6s 0.5s ease both;opacity:0">
+            <div style="width:48px;height:48px;border-radius:0.875rem;
+                        background:color-mix(in srgb,var(--color-accent) 14%,transparent);
+                        border:1px solid color-mix(in srgb,var(--color-accent) 28%,transparent);
+                        display:flex;align-items:center;justify-content:center;margin-bottom:1.375rem">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+            </div>
+            <h3 style="font-family:var(--font-display);font-size:1.0625rem;font-weight:700;
+                       color:var(--color-text);margin-bottom:0.625rem;line-height:1.3">
+                {{ 'home.feature_i18n_title'|trans }}
+            </h3>
+            <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin:0">
+                {{ 'home.feature_i18n_desc'|trans }}
+            </p>
+        </article>
+
+        <article class="feature-card" style="animation:fadeUp 0.6s 0.6s ease both;opacity:0">
+            <div style="width:48px;height:48px;border-radius:0.875rem;
+                        background:color-mix(in srgb,var(--color-success) 14%,transparent);
+                        border:1px solid color-mix(in srgb,var(--color-success) 28%,transparent);
+                        display:flex;align-items:center;justify-content:center;margin-bottom:1.375rem">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            </div>
+            <h3 style="font-family:var(--font-display);font-size:1.0625rem;font-weight:700;
+                       color:var(--color-text);margin-bottom:0.625rem;line-height:1.3">
+                {{ 'home.feature_security_title'|trans }}
+            </h3>
+            <p style="font-size:0.9375rem;color:var(--color-muted);line-height:1.7;margin:0">
+                {{ 'home.feature_security_desc'|trans }}
+            </p>
+        </article>
     </div>
 </section>
 
 <style>
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(24px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeDown {
