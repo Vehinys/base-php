@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'auth.reset_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block body %}
+<div class="relative" style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem">
+
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+        <div style="position:absolute;top:-15%;left:-8%;width:500px;height:500px;
+                    background:radial-gradient(circle,rgba(124,106,247,0.14) 0%,transparent 65%);
+                    border-radius:50%;filter:blur(70px)"></div>
+    </div>
+
+    <div class="w-full max-w-sm relative" style="z-index:1">
+
+        <div style="text-align:center;margin-bottom:2rem">
+            <a href="{{ path('app_home') }}"
+               style="font-family:var(--font-display);font-size:1.375rem;font-weight:800;
+                      color:var(--color-primary);text-decoration:none;
+                      display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem">
+                <span aria-hidden="true" style="font-size:1.125rem">&#9679;</span>
+                {{ 'app.name'|trans }}
+            </a>
+            <h1 style="font-family:var(--font-display);font-size:1.875rem;font-weight:800;
+                       color:var(--color-text);margin:0 0 0.5rem;letter-spacing:-0.02em">
+                {{ 'auth.reset_title'|trans }}
+            </h1>
+        </div>
+
+        <div class="card-gradient">
+            {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+
+                <div style="margin-bottom:1.25rem">
+                    {{ form_label(form.plainPassword.first, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.plainPassword.first, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(form.plainPassword.first) }}
+                </div>
+
+                <div style="margin-bottom:1.625rem">
+                    {{ form_label(form.plainPassword.second, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.plainPassword.second, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(form.plainPassword) }}
+                </div>
+
+                <button type="submit" class="btn-primary"
+                        style="width:100%;padding:0.875rem;font-size:1rem;justify-content:center">
+                    {{ 'auth.reset_submit'|trans }}
+                </button>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

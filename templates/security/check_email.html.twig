@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'auth.check_email_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block body %}
+<div style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem;text-align:center">
+
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+        <div style="position:absolute;top:-10%;right:-5%;width:500px;height:500px;
+                    background:radial-gradient(circle,rgba(106,247,168,0.1) 0%,transparent 65%);
+                    border-radius:50%;filter:blur(70px)"></div>
+    </div>
+
+    <div style="position:relative;max-width:440px;width:100%">
+
+        {# Icône enveloppe #}
+        <div style="width:72px;height:72px;border-radius:1.25rem;
+                    background:color-mix(in srgb,var(--color-success) 12%,transparent);
+                    border:1px solid color-mix(in srgb,var(--color-success) 30%,transparent);
+                    display:flex;align-items:center;justify-content:center;margin:0 auto 2rem">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+            </svg>
+        </div>
+
+        <h1 style="font-family:var(--font-display);font-size:1.875rem;font-weight:800;
+                   color:var(--color-text);margin:0 0 1rem;letter-spacing:-0.02em">
+            {{ 'auth.check_email_title'|trans }}
+        </h1>
+
+        <p style="color:var(--color-muted);font-size:1rem;line-height:1.6;margin:0 0 0.5rem">
+            {{ 'auth.check_email_desc'|trans }}
+        </p>
+        <p style="color:var(--color-text);font-weight:600;font-size:1rem;margin:0 0 1.5rem">
+            {{ email }}
+        </p>
+        <p style="color:var(--color-muted);font-size:0.875rem;margin:0 0 2.5rem">
+            {{ 'auth.check_email_spam'|trans }}
+        </p>
+
+        {# Bouton renvoyer avec protection CSRF #}
+        <form method="post" action="{{ path('app_resend_verification') }}">
+            <input type="hidden" name="email" value="{{ email }}">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('resend_verification') }}">
+            <button type="submit" class="btn-ghost" style="width:100%;justify-content:center">
+                {{ 'auth.resend_verification'|trans }}
+            </button>
+        </form>
+
+        <p style="margin-top:1.5rem">
+            <a href="{{ path('app_login') }}"
+               style="font-size:0.875rem;color:var(--color-muted);text-decoration:none">
+                ← {{ 'auth.back_to_login'|trans }}
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

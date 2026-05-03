@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'auth.reset_request_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block body %}
+<div class="relative" style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem">
+
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+        <div style="position:absolute;top:-15%;right:-8%;width:500px;height:500px;
+                    background:radial-gradient(circle,rgba(124,106,247,0.14) 0%,transparent 65%);
+                    border-radius:50%;filter:blur(70px)"></div>
+    </div>
+
+    <div class="w-full max-w-sm relative" style="z-index:1">
+
+        <div style="text-align:center;margin-bottom:2rem">
+            <a href="{{ path('app_home') }}"
+               style="font-family:var(--font-display);font-size:1.375rem;font-weight:800;
+                      color:var(--color-primary);text-decoration:none;
+                      display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:1.5rem">
+                <span aria-hidden="true" style="font-size:1.125rem">&#9679;</span>
+                {{ 'app.name'|trans }}
+            </a>
+            <h1 style="font-family:var(--font-display);font-size:1.875rem;font-weight:800;
+                       color:var(--color-text);margin:0 0 0.625rem;letter-spacing:-0.02em">
+                {{ 'auth.reset_request_title'|trans }}
+            </h1>
+            <p style="font-size:0.9375rem;color:var(--color-muted);margin:0">
+                {{ 'auth.reset_request_desc'|trans }}
+            </p>
+        </div>
+
+        {# Message flash de succès (renvoi silencieux — anti-énumération) #}
+        {% for msg in app.flashes('success') %}
+            <div class="alert-success" style="margin-bottom:1.25rem" role="status">
+                {{ msg|trans }}
+            </div>
+        {% endfor %}
+
+        {% for msg in app.flashes('error') %}
+            <div class="alert-error" style="margin-bottom:1.25rem" role="alert">
+                {{ msg|trans }}
+            </div>
+        {% endfor %}
+
+        <div class="card-gradient">
+            {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
+
+                <div style="margin-bottom:1.5rem">
+                    {{ form_label(form.email, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.email, {attr: {class: 'form-input', autocomplete: 'email'}}) }}
+                    {{ form_errors(form.email) }}
+                </div>
+
+                <button type="submit" class="btn-primary"
+                        style="width:100%;padding:0.875rem;font-size:1rem;justify-content:center">
+                    {{ 'auth.reset_request_submit'|trans }}
+                </button>
+
+            {{ form_end(form) }}
+        </div>
+
+        <p style="text-align:center;margin-top:1.5rem">
+            <a href="{{ path('app_login') }}"
+               style="font-size:0.875rem;color:var(--color-muted);text-decoration:none">
+                ← {{ 'auth.back_to_login'|trans }}
+            </a>
+        </p>
+    </div>
+</div>
+{% endblock %}

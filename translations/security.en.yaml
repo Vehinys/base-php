@@ -1,0 +1,2 @@
+# Messages for the 'security' domain — used by UserChecker and Symfony security exceptions
+auth.email_not_verified: "Your email address has not been verified yet."

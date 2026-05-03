@@ -1,0 +1,2 @@
+# Messages du domaine 'security' utilisés par UserChecker et les exceptions Symfony
+auth.email_not_verified: "Votre adresse e-mail n'a pas encore été vérifiée."

@@ -16,6 +16,8 @@ security:
             lazy: true
             provider: app_user_provider
             entry_point: App\Security\AppAuthenticator
+            # Vérifie isVerified avant toute connexion locale (OAuth = always verified)
+            user_checker: App\Security\UserChecker
             custom_authenticators:
                 - App\Security\AppAuthenticator
                 - App\Security\GoogleAuthenticator
@@ -39,6 +41,8 @@ security:
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
+        - { path: ^/verify, roles: PUBLIC_ACCESS }
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
         - { path: ^/connect, roles: PUBLIC_ACCESS }
         - { path: ^/locale, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: PUBLIC_ACCESS }
