@@ -10,8 +10,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap"></noscript>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&display=swap"></noscript>
 
     <meta property="og:title" content="{% block og_title %}{{ 'app.name'|trans }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ 'app.description'|trans }}{% endblock %}">
@@ -39,7 +39,7 @@
 
     {# ═══════════════════════════════════════════════════════ HEADER #}
     <header role="banner"
-            style="background:rgba(15,15,29,0.82);border-bottom:1px solid rgba(124,106,247,0.12);position:sticky;top:0;z-index:40;backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%)">
+            style="background:var(--color-bg);border-bottom:1px solid var(--color-border);position:sticky;top:0;z-index:40">
         <nav role="navigation"
              aria-label="{{ 'nav.main'|trans }}"
              style="height:64px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 1.25rem;max-width:72rem;margin-left:auto;margin-right:auto">
@@ -47,8 +47,8 @@
             {# Logo #}
             <a href="{{ path('app_home') }}"
                aria-label="{{ 'app.name'|trans }} — {{ 'nav.home'|trans }}"
-               style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:var(--color-primary);text-decoration:none;flex-shrink:0;display:flex;align-items:center;gap:0.5rem">
-                <span aria-hidden="true" style="font-size:1.5rem">&#9679;</span>
+               style="font-family:var(--font-display);font-size:1.1875rem;font-weight:800;color:var(--color-text);text-decoration:none;flex-shrink:0;display:flex;align-items:center;gap:0.5rem;letter-spacing:-0.02em">
+                <span aria-hidden="true" style="display:inline-block;width:10px;height:10px;background:var(--color-primary);border-radius:1px;flex-shrink:0"></span>
                 {{ 'app.name'|trans }}
             </a>
 
@@ -154,7 +154,7 @@
         {# Menu mobile — visible uniquement quand la classe .open est ajoutée par JS #}
         <div id="mobileMenu"
              class="nav-mobile-menu"
-             style="flex-direction:column;gap:0;background:var(--color-surface);border-top:1px solid var(--color-border);padding:1rem 1.25rem 1.5rem">
+             style="flex-direction:column;gap:0;background:var(--color-surface-2);border-top:1px solid var(--color-border);padding:1rem 1.25rem 1.5rem">
             <a href="{{ path('app_home') }}"
                style="padding:0.625rem 0;font-size:0.9375rem;font-weight:500;color:var(--color-muted);text-decoration:none;border-bottom:1px solid var(--color-border)">
                 {{ 'nav.home'|trans }}
@@ -210,8 +210,8 @@
             {# Colonne 1 — Marque #}
             <div>
                 <a href="{{ path('app_home') }}"
-                   style="font-family:var(--font-display);font-size:1.25rem;font-weight:800;color:var(--color-primary);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem">
-                    <span aria-hidden="true">&#9679;</span>
+                   style="font-family:var(--font-display);font-size:1.125rem;font-weight:800;color:var(--color-text);text-decoration:none;display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem;letter-spacing:-0.02em">
+                    <span aria-hidden="true" style="display:inline-block;width:9px;height:9px;background:var(--color-primary);border-radius:1px;flex-shrink:0"></span>
                     {{ 'app.name'|trans }}
                 </a>
                 <p style="font-size:0.875rem;color:var(--color-muted);line-height:1.6;max-width:260px;margin-top:0.5rem">
