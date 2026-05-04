@@ -5,18 +5,18 @@
 {% block body %}
 
 {# ═══════════════════════════════════════════════════ HERO #}
-<section class="relative overflow-hidden"
-         style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:6rem 1.5rem">
+{# hero-section : position:relative, overflow:hidden, flex centré, padding responsive mobile-first #}
+<section class="hero-section" aria-labelledby="hero-heading">
 
     {# Orbes de fond #}
     <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
-        <div style="position:absolute;top:-10%;right:-8%;width:700px;height:700px;
+        <div style="position:absolute;top:-10%;right:-8%;width:clamp(300px,55vw,700px);height:clamp(300px,55vw,700px);
                     background:radial-gradient(circle,rgba(124,106,247,0.18) 0%,transparent 65%);
                     border-radius:50%;filter:blur(60px)"></div>
-        <div style="position:absolute;bottom:-20%;left:-5%;width:550px;height:550px;
+        <div style="position:absolute;bottom:-20%;left:-5%;width:clamp(250px,45vw,550px);height:clamp(250px,45vw,550px);
                     background:radial-gradient(circle,rgba(247,194,106,0.1) 0%,transparent 65%);
                     border-radius:50%;filter:blur(70px)"></div>
-        <div style="position:absolute;top:40%;left:15%;width:280px;height:280px;
+        <div style="position:absolute;top:40%;left:15%;width:clamp(140px,22vw,280px);height:clamp(140px,22vw,280px);
                     background:radial-gradient(circle,rgba(124,106,247,0.07) 0%,transparent 70%);
                     border-radius:50%;filter:blur(40px)"></div>
     </div>
@@ -30,19 +30,20 @@
 
     <div class="relative max-w-3xl mx-auto text-center" style="z-index:1">
 
-        <div style="animation:fadeDown 0.5s ease both;margin-bottom:2rem">
+        <div style="animation:fadeDown 0.5s ease both;margin-bottom:1.5rem">
             <span class="badge">
                 <svg width="7" height="7" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><circle cx="4" cy="4" r="4"/></svg>
                 {{ 'home.tagline'|trans }}
             </span>
         </div>
 
-        <h1 style="font-family:var(--font-display);
-                   font-size:clamp(2.75rem,8vw,5.5rem);
+        <h1 id="hero-heading"
+            style="font-family:var(--font-display);
+                   font-size:clamp(2.25rem,8vw,5.5rem);
                    font-weight:800;
                    line-height:1.04;
                    letter-spacing:-0.035em;
-                   margin-bottom:1.5rem;
+                   margin-bottom:1.25rem;
                    animation:fadeUp 0.6s 0.1s ease both;
                    opacity:0">
             <span style="background:linear-gradient(150deg,var(--color-text) 0%,rgba(220,215,255,0.7) 100%);
@@ -51,13 +52,13 @@
             </span>
         </h1>
 
-        <p style="font-size:1.125rem;color:var(--color-muted);line-height:1.7;max-width:34rem;
-                  margin:0 auto 2.75rem;animation:fadeUp 0.6s 0.2s ease both;opacity:0">
+        <p style="font-size:clamp(0.9375rem,2.5vw,1.125rem);color:var(--color-muted);line-height:1.7;max-width:34rem;
+                  margin:0 auto 2.25rem;animation:fadeUp 0.6s 0.2s ease both;opacity:0">
             {{ 'home.subtitle'|trans }}
         </p>
 
-        <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem;
-                    animation:fadeUp 0.6s 0.3s ease both;opacity:0">
+        {# cta-group : colonne mobile (boutons pleine largeur), ligne à partir de 480px #}
+        <div class="cta-group" style="animation:fadeUp 0.6s 0.3s ease both;opacity:0">
             {% if app.user %}
                 <a href="#" class="btn-primary" style="font-size:1rem;padding:0.875rem 2.25rem">
                     {{ 'home.cta_logged'|trans({ name: app.user.name ?? app.user.email }) }}
@@ -78,10 +79,12 @@
 </section>
 
 {# ═══════════════════════════════════════════════ FEATURES #}
-<section class="max-w-5xl mx-auto px-6 pb-28" aria-labelledby="features-heading">
+{# features-section : padding responsive, max-width centré sur desktop #}
+<section class="features-section" aria-labelledby="features-heading">
     <h2 id="features-heading" class="sr-only">{{ 'home.features_title'|trans }}</h2>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem">
+    {# features-grid : 1 col mobile → 2 cols tablette → 3 cols desktop #}
+    <div class="features-grid">
 
         <article class="feature-card" style="animation:fadeUp 0.6s 0.4s ease both;opacity:0">
             <div style="width:48px;height:48px;border-radius:0.875rem;

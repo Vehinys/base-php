@@ -4,15 +4,15 @@
 {% block robots %}noindex,nofollow{% endblock %}
 
 {% block body %}
-<div style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem;text-align:center">
+<div class="auth-page" style="text-align:center">
 
     <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
-        <div style="position:absolute;top:-10%;right:-5%;width:500px;height:500px;
+        <div style="position:absolute;top:-10%;right:-5%;width:clamp(250px,40vw,500px);height:clamp(250px,40vw,500px);
                     background:radial-gradient(circle,rgba(106,247,168,0.1) 0%,transparent 65%);
                     border-radius:50%;filter:blur(70px)"></div>
     </div>
 
-    <div style="position:relative;max-width:440px;width:100%">
+    <div class="auth-card">
 
         {# Icône enveloppe #}
         <div style="width:72px;height:72px;border-radius:1.25rem;

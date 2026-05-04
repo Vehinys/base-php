@@ -4,19 +4,19 @@
 {% block robots %}noindex,nofollow{% endblock %}
 
 {% block body %}
-<div class="relative" style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem">
+<div class="auth-page">
 
     {# Orbes de fond #}
     <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
-        <div style="position:absolute;top:-10%;left:-10%;width:500px;height:500px;
+        <div style="position:absolute;top:-10%;left:-10%;width:clamp(250px,40vw,500px);height:clamp(250px,40vw,500px);
                     background:radial-gradient(circle,rgba(124,106,247,0.15) 0%,transparent 65%);
                     border-radius:50%;filter:blur(70px)"></div>
-        <div style="position:absolute;bottom:-15%;right:-5%;width:420px;height:420px;
+        <div style="position:absolute;bottom:-15%;right:-5%;width:clamp(200px,32vw,420px);height:clamp(200px,32vw,420px);
                     background:radial-gradient(circle,rgba(247,194,106,0.09) 0%,transparent 65%);
                     border-radius:50%;filter:blur(60px)"></div>
     </div>
 
-    <div class="w-full max-w-sm relative" style="z-index:1">
+    <div class="auth-card">
 
         {# En-tête #}
         <div style="text-align:center;margin-bottom:2rem">

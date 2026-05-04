@@ -42,8 +42,7 @@
             style="background:rgba(15,15,29,0.82);border-bottom:1px solid rgba(124,106,247,0.12);position:sticky;top:0;z-index:40;backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%)">
         <nav role="navigation"
              aria-label="{{ 'nav.main'|trans }}"
-             class="max-w-6xl mx-auto px-6"
-             style="height:64px;display:flex;align-items:center;justify-content:space-between;gap:1.5rem">
+             style="height:64px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 1.25rem;max-width:72rem;margin-left:auto;margin-right:auto">
 
             {# Logo #}
             <a href="{{ path('app_home') }}"
@@ -53,8 +52,8 @@
                 {{ 'app.name'|trans }}
             </a>
 
-            {# Nav desktop #}
-            <div class="nav-desktop" style="display:flex;align-items:center;gap:1.5rem;flex:1">
+            {# Nav desktop — masquée mobile, visible tablette+ (CSS .nav-desktop) #}
+            <div class="nav-desktop" style="align-items:center;gap:1.5rem;flex:1">
                 <a href="{{ path('app_home') }}"
                    style="font-size:0.9375rem;font-weight:500;color:{% if app.request.attributes.get('_route') == 'app_home' %}var(--color-text){% else %}var(--color-muted){% endif %};text-decoration:none;transition:color 0.15s"
                    {% if app.request.attributes.get('_route') == 'app_home' %}aria-current="page"{% endif %}>
@@ -63,8 +62,8 @@
                 {% block nav_items %}{% endblock %}
             </div>
 
-            {# Actions desktop #}
-            <div class="nav-desktop" style="display:flex;align-items:center;gap:1rem">
+            {# Actions desktop — masquées mobile, visibles tablette+ (CSS .nav-desktop) #}
+            <div class="nav-desktop" style="align-items:center;gap:1rem">
 
                 {# Sélecteur de langue #}
                 <div role="group" aria-label="{{ 'nav.language'|trans }}"
@@ -96,7 +95,6 @@
                                 aria-label="{{ 'nav.user_menu'|trans }}"
                                 style="display:flex;align-items:center;gap:0.5rem;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:0.5rem;padding:0.375rem 0.75rem;cursor:pointer;color:var(--color-text);font-size:0.875rem;font-weight:500">
                             {% if app.user.avatarUrl %}
-                                {# loading=lazy : l'avatar OAuth n'est pas critique au rendu initial #}
                                 <img src="{{ app.user.avatarUrl }}"
                                      alt="{{ app.user.name ?? app.user.email }}"
                                      width="24" height="24"
@@ -139,25 +137,24 @@
                 {% endif %}
             </div>
 
-            {# Hamburger mobile #}
+            {# Hamburger — visible mobile, masqué tablette+ (CSS .nav-hamburger) #}
             <button class="nav-hamburger"
                     id="mobileMenuBtn"
                     aria-controls="mobileMenu"
                     aria-expanded="false"
                     aria-label="{{ 'nav.open_menu'|trans }}"
                     data-label-open="{{ 'nav.open_menu'|trans }}"
-                    data-label-close="{{ 'nav.close_menu'|trans }}"
-                    style="display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px">
+                    data-label-close="{{ 'nav.close_menu'|trans }}">
                 <span style="display:block;width:22px;height:2px;background:var(--color-text);border-radius:2px;transition:transform 0.2s"></span>
                 <span style="display:block;width:22px;height:2px;background:var(--color-text);border-radius:2px;transition:opacity 0.2s"></span>
                 <span style="display:block;width:22px;height:2px;background:var(--color-text);border-radius:2px;transition:transform 0.2s"></span>
             </button>
         </nav>
 
-        {# Menu mobile #}
+        {# Menu mobile — visible uniquement quand la classe .open est ajoutée par JS #}
         <div id="mobileMenu"
              class="nav-mobile-menu"
-             style="flex-direction:column;gap:0;background:var(--color-surface);border-top:1px solid var(--color-border);padding:1rem 1.5rem 1.5rem">
+             style="flex-direction:column;gap:0;background:var(--color-surface);border-top:1px solid var(--color-border);padding:1rem 1.25rem 1.5rem">
             <a href="{{ path('app_home') }}"
                style="padding:0.625rem 0;font-size:0.9375rem;font-weight:500;color:var(--color-muted);text-decoration:none;border-bottom:1px solid var(--color-border)">
                 {{ 'nav.home'|trans }}
@@ -207,9 +204,8 @@
     <footer role="contentinfo"
             style="background-color:var(--color-surface);border-top:1px solid var(--color-border);margin-top:auto">
 
-        {# Bloc principal #}
-        <div class="max-w-6xl mx-auto px-6 py-12 footer-grid"
-             style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem">
+        {# Grille principale — 1 col mobile, 2 cols tablette, 4 cols desktop (CSS .footer-main) #}
+        <div class="footer-main">
 
             {# Colonne 1 — Marque #}
             <div>
@@ -238,7 +234,6 @@
 
             {# Colonne 2 — Navigation #}
             <nav aria-label="{{ 'footer.nav_title'|trans }}">
-                {# aria-hidden : le nav a déjà un aria-label identique — évite la redondance pour les lecteurs d'écran #}
                 <p style="font-family:var(--font-display);font-size:0.8125rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text);margin-bottom:1rem" aria-hidden="true">
                     {{ 'footer.nav_title'|trans }}
                 </p>
@@ -346,10 +341,9 @@
             </div>
         </div>
 
-        {# Barre de bas de page #}
+        {# Barre de bas de page — colonne mobile, ligne tablette+ (CSS .footer-bottom-inner) #}
         <div style="border-top:1px solid var(--color-border)">
-            <div class="max-w-6xl mx-auto px-6 py-4"
-                 style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem">
+            <div class="footer-bottom-inner">
                 <p style="font-size:0.8125rem;color:var(--color-muted);margin:0">
                     &copy; {{ "now"|date("Y") }} <strong style="color:var(--color-text)">{{ 'app.name'|trans }}</strong>.
                     {{ 'footer.all_rights'|trans }}
