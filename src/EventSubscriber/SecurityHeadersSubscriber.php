@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Abonné complémentaire à NelmioSecurityBundle pour les en-têtes de sécurité HTTP.
+ *
+ * NelmioSecurityBundle couvre : CSP, X-Frame-Options, HSTS, X-Content-Type-Options,
+ * X-XSS-Protection et Referrer-Policy (configurés dans nelmio_security.yaml).
+ *
+ * Ce subscriber ajoute Permissions-Policy, non géré nativement par NelmioSecurityBundle.
+ * Il est conservé séparé de PermissionsPolicySubscriber pour historique ; les deux
+ * subscribers font le même travail — si des doublons d'en-tête apparaissent, supprimer l'un.
+ *
+ * @deprecated Fonctionnellement redondant avec PermissionsPolicySubscriber.
+ *             À conserver ou supprimer après vérification qu'une seule instance suffit.
+ */
+
 declare(strict_types=1);
 
 namespace App\EventSubscriber;
@@ -14,6 +28,11 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class SecurityHeadersSubscriber implements EventSubscriberInterface
 {
+    /**
+     * Injecte Permissions-Policy sur toutes les réponses principales.
+     *
+     * @param ResponseEvent $event Événement déclenché avant l'envoi de la réponse HTTP
+     */
     public function onKernelResponse(ResponseEvent $event): void
     {
         // N'intervenir que sur la réponse principale (pas les sous-requêtes)
@@ -28,6 +47,9 @@ class SecurityHeadersSubscriber implements EventSubscriberInterface
         );
     }
 
+    /**
+     * @return array<string, string>
+     */
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::RESPONSE => 'onKernelResponse'];
