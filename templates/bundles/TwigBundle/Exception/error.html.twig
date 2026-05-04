@@ -1,3 +1,26 @@
+{#
+    Page d'erreur générique — fallback pour tous les codes HTTP non traités spécifiquement.
+
+    Convention Symfony de surcharge TwigBundle :
+      Ce template couvre les erreurs sans template dédié (ex. 403, 500, 503).
+      Pour personnaliser un code spécifique : créer error{code}.html.twig dans ce dossier.
+      Exemples : error403.html.twig, error500.html.twig.
+
+    Variables disponibles (injectées par TwigBundle) :
+      - status_code : code HTTP numérique (500, 403, 503…)
+      - status_text : libellé HTTP correspondant (ex. "Internal Server Error")
+      - exception   : objet Throwable (disponible uniquement en DEV, pas en PROD)
+
+    Design :
+      Design rouge (rgba(248,120,120,…)) pour les 5xx, violet pour les 4xx.
+      Le code est rendu en gradient CSS, aria-hidden car le h1 est suffisant.
+      En prod, Symfony n'expose pas le message d'exception dans ce template.
+
+    Traduction contextuelle 500 :
+      Le message 500 est spécifique (erreur serveur) alors que les autres codes
+      réutilisent le message générique 404_desc. À affiner si d'autres codes
+      ont des messages métier utiles.
+#}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'error.error_code'|trans({'%code%': status_code}) }} — {{ 'app.name'|trans }}{% endblock %}
@@ -6,6 +29,7 @@
 {% block body %}
 <div style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem;text-align:center;position:relative;overflow:hidden">
 
+    {# Orbe décoratif rouge pour les erreurs serveur — aria-hidden car purement décoratif #}
     <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none">
         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
                     width:600px;height:600px;
@@ -14,6 +38,7 @@
     </div>
 
     <div style="position:relative;z-index:1;max-width:480px">
+        {# Code HTTP affiché en grand — aria-hidden car le h1 transmet l'info textuelle #}
         <p aria-hidden="true"
            style="font-family:var(--font-display);font-size:7rem;font-weight:800;
                   line-height:1;margin:0 0 1rem;
@@ -25,6 +50,7 @@
 
         <h1 style="font-family:var(--font-display);font-size:1.875rem;font-weight:800;
                    color:var(--color-text);margin:0 0 1rem;letter-spacing:-0.02em">
+            {# Message spécifique pour 500, générique pour les autres codes #}
             {% if status_code == 500 %}
                 {{ 'error.500_title'|trans }}
             {% else %}

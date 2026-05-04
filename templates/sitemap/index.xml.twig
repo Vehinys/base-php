@@ -1,3 +1,21 @@
+{#
+    Sitemap XML — protocole Sitemaps.org 0.9.
+
+    Ce template est rendu par SitemapController::index() avec Content-Type: application/xml.
+    L'URL du sitemap est déclarée dans robots.txt (ou soumise à Google Search Console).
+
+    Structure de la variable 'entries' :
+      Tableau d'objets/tableaux avec les clés :
+        - loc        : URL absolue de la page (ex. https://baseapp.dev/)
+        - lastmod    : date de dernière modification au format YYYY-MM-DD
+        - changefreq : fréquence estimée de modification (daily, weekly, monthly, yearly, never)
+        - priority   : priorité relative entre pages du site (0.0 à 1.0, défaut 0.5)
+
+    Note : les pages privées (login, register, account) ne sont pas incluses —
+    SitemapController les exclut car elles sont déclarées noindex dans leurs templates.
+
+    Pour ajouter une nouvelle page indexable : l'ajouter dans SitemapController::index().
+#}
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {% for entry in entries %}

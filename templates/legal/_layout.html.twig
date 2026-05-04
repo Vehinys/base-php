@@ -1,9 +1,33 @@
+{#
+    Layout partagé pour toutes les pages légales (mentions, RGPD, CGU, cookies).
+
+    Structure :
+      - Sidebar sticky (240px) avec navigation entre les 4 documents
+      - Article principal (flex:1) avec le contenu injecté via {% block legal_content %}
+      - CSS local (.legal-content) pour la typographie éditoriale des documents légaux
+
+    Navigation sidebar :
+      La liste legal_links est définie dans ce template pour centraliser les routes
+      et labels en un seul endroit (DRY). aria-current="page" indique la page active
+      aux lecteurs d'écran et permet le ciblage CSS de l'élément actif.
+
+    Position sticky de la sidebar :
+      top:88px = hauteur du header (64px) + marge de 24px.
+      En mobile (max-width:768px), la sidebar passe en position:static via le CSS local.
+
+    Surcharge de ce layout :
+      Les templates enfants (mentions.html.twig, privacy.html.twig…) héritent de ce layout
+      via {% extends 'legal/_layout.html.twig' %} et définissent {% block legal_content %}.
+#}
 {% extends 'base.html.twig' %}
 
 {% block body %}
 <div class="max-w-6xl mx-auto px-6 py-16" style="display:grid;grid-template-columns:240px 1fr;gap:3rem;align-items:start">
 
-    {# Sidebar navigation #}
+    {#
+        Sidebar sticky — liste des documents légaux avec highlighting de la page active.
+        position:sticky + top:88px = reste visible pendant le scroll vertical du contenu.
+    #}
     <aside aria-label="{{ 'legal.nav_title'|trans }}"
            style="position:sticky;top:88px">
         <p style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--color-muted);margin-bottom:0.75rem;font-family:var(--font-display)">
@@ -11,6 +35,7 @@
         </p>
         <nav>
             <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px">
+                {# Centralisation des liens légaux — évite de dupliquer dans chaque template enfant #}
                 {% set legal_links = [
                     {route: 'legal_mentions',  label: 'footer.legal_mentions'},
                     {route: 'legal_privacy',   label: 'footer.legal_privacy'},
@@ -35,6 +60,7 @@
             </ul>
         </nav>
 
+        {# Encart "Dernière mise à jour" — date définie dans les fichiers de traduction #}
         <div style="margin-top:1.5rem;padding:0.875rem;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:0.5rem">
             <p style="font-size:0.8125rem;color:var(--color-muted);margin:0 0 0.5rem">
                 {{ 'legal.last_updated'|trans }}
@@ -45,12 +71,18 @@
         </div>
     </aside>
 
-    {# Contenu #}
+    {# Contenu légal — injecté par le template enfant via {% block legal_content %} #}
     <article class="legal-content" style="min-width:0">
         {% block legal_content %}{% endblock %}
     </article>
 </div>
 
+{#
+    CSS local pour la typographie des documents légaux.
+    Défini ici plutôt que dans app.css car il ne s'applique qu'aux pages légales.
+    Les sélecteurs h1/h2/h3/p/ul/li ciblent le contenu brut des templates enfants
+    sans nécessiter de classes CSS sur chaque élément.
+#}
 <style>
 .legal-content h1 {
     font-family: var(--font-display);
@@ -74,7 +106,7 @@
     margin: 2.5rem 0 0.875rem;
     padding-top: 2.5rem;
     border-top: 1px solid var(--color-border);
-    scroll-margin-top: 88px;
+    scroll-margin-top: 88px; /* compense le header sticky pour le scroll sur ancre #id */
 }
 .legal-content h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
 .legal-content h3 {
@@ -116,6 +148,7 @@
     margin: 1.5rem 0;
 }
 .legal-content .info-box p { margin: 0; color: var(--color-text); }
+/* Mobile : sidebar passe en bloc au-dessus du contenu */
 @media (max-width: 768px) {
     .max-w-6xl [style*="grid-template-columns: 240px"] {
         grid-template-columns: 1fr !important;

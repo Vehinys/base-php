@@ -1,3 +1,20 @@
+{#
+    Étape 2 du flux de réinitialisation — saisie du nouveau mot de passe.
+
+    Ce template est accessible uniquement via un token valide dans l'URL (/reset-password/{token}).
+    Le contrôleur PasswordResetController::reset() valide le token et son expiration (1h)
+    avant de rendre ce template. Un token invalide ou expiré redirige vers l'étape 1.
+
+    Formulaire (ResetPasswordFormType) :
+      - Identique au formulaire d'inscription pour la partie mot de passe.
+      - RepeatedType : deux champs (first + second) pour confirmation.
+      - Contraintes CNIL : 12 caractères min, majuscule, minuscule, chiffre.
+      - Vérification HIBP effectuée côté serveur après validation des contraintes.
+
+    Indicateur de force (.pw-requirements) :
+      Même mécanisme que sur la page d'inscription — app.js surveille l'attribut
+      data-strength-input sur le premier champ pour mettre à jour les indicateurs.
+#}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'auth.reset_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
@@ -6,6 +23,7 @@
 {% block body %}
 <div class="auth-page">
 
+    {# Décoration géométrique — aria-hidden car purement décoratif #}
     <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
         <div style="position:absolute;inset:0;
                     background-image:linear-gradient(var(--color-border) 1px,transparent 1px),
@@ -22,16 +40,24 @@
                        color:var(--color-text);margin:0 0 0;letter-spacing:-0.03em">
                 {{ 'auth.reset_title'|trans }}
             </h1>
+            {# Trait décoratif sous le titre #}
             <div style="width:2rem;height:2px;background:var(--color-primary);margin-top:0.875rem"></div>
         </div>
 
         <div class="card-gradient">
+            {# novalidate : la validation HTML5 native est désactivée — Symfony valide côté serveur #}
             {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
 
+                {# Premier champ (mot de passe) avec indicateur de force #}
                 <div style="margin-bottom:0.75rem">
                     {{ form_label(form.plainPassword.first, null, {label_attr: {class: 'form-label'}}) }}
                     {{ form_widget(form.plainPassword.first, {attr: {class: 'form-input'}}) }}
                     {{ form_errors(form.plainPassword.first) }}
+
+                    {#
+                        Indicateur de force — mis à jour en temps réel par app.js.
+                        aria-live="polite" annonce les changements aux lecteurs d'écran.
+                    #}
                     <ul class="pw-requirements" aria-live="polite"
                         aria-label="{{ 'form.pw_strength_title'|trans }}">
                         <li data-req="length">
@@ -53,6 +79,7 @@
                     </ul>
                 </div>
 
+                {# Champ de confirmation — erreurs de non-correspondance sur form.plainPassword (pas .second) #}
                 <div style="margin-bottom:1.625rem">
                     {{ form_label(form.plainPassword.second, null, {label_attr: {class: 'form-label'}}) }}
                     {{ form_widget(form.plainPassword.second, {attr: {class: 'form-input'}}) }}

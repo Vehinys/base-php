@@ -1,3 +1,20 @@
+{#
+    Étape 1 du flux de réinitialisation de mot de passe — saisie de l'adresse e-mail.
+
+    Anti-énumération de comptes :
+      Que l'adresse e-mail soit enregistrée ou non, le contrôleur affiche toujours
+      le flash 'success' avec la clé 'auth.reset_email_sent'. L'utilisateur ne peut
+      donc pas savoir si un compte existe pour une adresse donnée.
+
+    Flashes :
+      - 'success' : l'e-mail a été traité (ou non — voir anti-énumération)
+      - 'error'   : rate limiting déclenché (trop de tentatives)
+      Les deux types sont affichés avant le formulaire pour visibilité immédiate.
+      role="status" sur success = annonce non-urgente ; role="alert" sur error = urgente.
+
+    Le formulaire est rendu par Symfony Form (ResetPasswordRequestFormType).
+    novalidate : désactive la validation HTML5 native.
+#}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'auth.reset_request_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
@@ -6,6 +23,7 @@
 {% block body %}
 <div class="auth-page">
 
+    {# Décoration géométrique — aria-hidden car purement décoratif #}
     <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
         <div style="position:absolute;inset:0;
                     background-image:linear-gradient(var(--color-border) 1px,transparent 1px),
@@ -37,15 +55,18 @@
             </p>
         </div>
 
+        {# role="status" : annonce non-urgente (succès = information) #}
         {% for msg in app.flashes('success') %}
             <div class="alert-success" style="margin-bottom:1.25rem" role="status">{{ msg|trans }}</div>
         {% endfor %}
 
+        {# role="alert" : annonce urgente (erreur = bloquant pour l'action) #}
         {% for msg in app.flashes('error') %}
             <div class="alert-error" style="margin-bottom:1.25rem" role="alert">{{ msg|trans }}</div>
         {% endfor %}
 
         <div class="card-gradient">
+            {# novalidate : validation côté serveur uniquement #}
             {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
 
                 <div style="margin-bottom:1.5rem">

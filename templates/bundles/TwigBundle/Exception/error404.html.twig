@@ -1,3 +1,23 @@
+{#
+    Page d'erreur 404 (Page non trouvée) — surcharge du template TwigBundle.
+
+    Emplacement conventions Symfony :
+      templates/bundles/TwigBundle/Exception/error404.html.twig surcharge le template
+      par défaut de TwigBundle pour les erreurs 404. En prod, Symfony sert cette page
+      via ExceptionController quand une NotFoundHttpException est levée ou qu'une
+      ressource est introuvable.
+
+    Séparation error404.html.twig vs error.html.twig :
+      - error404.html.twig : traitement spécifique 404 (titre, description, design violet)
+      - error.html.twig : fallback pour tous les autres codes (500, 403, 503…)
+      Cette séparation permet un message contextualisé plutôt qu'un message générique.
+
+    Note design :
+      Le "404" affiché avec gradient CSS et -webkit-text-fill-color est aria-hidden :
+      le h1 texte transmet déjà l'information aux lecteurs d'écran.
+
+    robots: noindex — les pages d'erreur ne doivent pas être indexées.
+#}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ 'error.404_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
@@ -6,7 +26,7 @@
 {% block body %}
 <div style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem;text-align:center;position:relative;overflow:hidden">
 
-    {# Orbe décoratif — aria-hidden car purement décoratif #}
+    {# Orbe décoratif violet — aria-hidden car purement décoratif #}
     <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none">
         <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
                     width:600px;height:600px;
@@ -15,7 +35,11 @@
     </div>
 
     <div style="position:relative;z-index:1;max-width:480px">
-        {# Code d'erreur stylisé — aria-hidden car le h1 texte suffit #}
+        {#
+            "404" affiché avec gradient CSS pour l'effet visuel.
+            aria-hidden : le h1 ci-dessous transmet déjà "Page introuvable" aux lecteurs d'écran.
+            -webkit-background-clip + -webkit-text-fill-color = gradient sur le texte.
+        #}
         <p aria-hidden="true"
            style="font-family:var(--font-display);font-size:7rem;font-weight:800;
                   line-height:1;margin:0 0 1rem;
