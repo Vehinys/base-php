@@ -9,17 +9,22 @@ use App\Form\ResetPasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\UserRepository;
 use App\Security\AppAuthenticator;
+use App\Service\AuditLogger;
+use App\Service\HibpService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/reset-password')]
 class PasswordResetController extends AbstractController
@@ -28,27 +33,39 @@ class PasswordResetController extends AbstractController
     {
     }
 
-    // Formulaire de demande de réinitialisation (entrer l'e-mail)
     #[Route('', name: 'app_reset_password_request', methods: ['GET', 'POST'])]
-    public function request(Request $request, UserRepository $repo, EntityManagerInterface $em): Response
-    {
+    public function request(
+        Request $request,
+        UserRepository $repo,
+        EntityManagerInterface $em,
+        RateLimiterFactory $passwordResetRequestLimiter,
+        AuditLogger $auditLogger,
+    ): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
+
+        $limiter = $passwordResetRequestLimiter->create($request->getClientIp());
 
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if (!$limiter->consume(1)->isAccepted()) {
+                $this->addFlash('error', 'error.too_many_requests');
+
+                return $this->redirectToRoute('app_reset_password_request');
+            }
+
             $emailAddress = $form->get('email')->getData();
             $user = $repo->findOneBy(['email' => $emailAddress]);
 
-            // Traitement silencieux — ne révèle pas si l'e-mail est enregistré (anti-énumération)
             if ($user) {
                 $user->setResetToken(bin2hex(random_bytes(32)))
                      ->setResetTokenExpiresAt(new \DateTime('+1 hour'));
                 $em->flush();
                 $this->sendResetEmail($user);
+                $auditLogger->log('password_reset.requested', $user, $request);
             }
 
             $this->addFlash('success', 'auth.reset_email_sent');
@@ -59,7 +76,6 @@ class PasswordResetController extends AbstractController
         return $this->render('password_reset/request.html.twig', ['form' => $form]);
     }
 
-    // Formulaire de saisie du nouveau mot de passe (cliqué depuis l'e-mail)
     #[Route('/{token}', name: 'app_reset_password', methods: ['GET', 'POST'])]
     public function reset(
         string $token,
@@ -68,10 +84,12 @@ class PasswordResetController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordHasherInterface $hasher,
         Security $security,
+        HibpService $hibp,
+        AuditLogger $auditLogger,
+        TranslatorInterface $translator,
     ): Response {
         $user = $repo->findOneBy(['resetToken' => $token]);
 
-        // Invalide si le token est inconnu ou expiré
         if (!$user || !$user->getResetTokenExpiresAt() || $user->getResetTokenExpiresAt() < new \DateTime()) {
             $this->addFlash('error', 'auth.reset_invalid');
 
@@ -82,14 +100,25 @@ class PasswordResetController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($hasher->hashPassword($user, $form->get('plainPassword')->getData()))
+            /** @var string $plainPassword */
+            $plainPassword = $form->get('plainPassword')->getData();
+
+            if ($hibp->isPwned($plainPassword)) {
+                $form->get('plainPassword')->addError(
+                    new FormError($translator->trans('form.password_pwned'))
+                );
+
+                return $this->render('password_reset/reset.html.twig', ['form' => $form]);
+            }
+
+            $user->setPassword($hasher->hashPassword($user, $plainPassword))
                  ->setResetToken(null)
                  ->setResetTokenExpiresAt(null)
-                 // Réinitialiser via e-mail prouve la propriété de l'adresse
                  ->setIsVerified(true);
             $em->flush();
 
-            // Connexion automatique après réinitialisation
+            $auditLogger->log('password_reset.completed', $user, $request);
+
             return $security->login($user, AppAuthenticator::class, 'main');
         }
 

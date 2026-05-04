@@ -2,8 +2,6 @@
 import './styles/app.css';
 
 // ─── Menu mobile ──────────────────────────────────────────────────────────────
-// Les labels d'accessibilité sont lus depuis les data-attributes Twig
-// pour garder les traductions dans les fichiers YAML (pas dans le JS)
 (function () {
     const btn = document.getElementById('mobileMenuBtn');
     const menu = document.getElementById('mobileMenu');
@@ -12,17 +10,14 @@ import './styles/app.css';
     btn.addEventListener('click', function () {
         const isOpen = menu.classList.toggle('open');
         btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-        // Met à jour le label pour les lecteurs d'écran
         const label = isOpen ? btn.dataset.labelClose : btn.dataset.labelOpen;
         if (label) btn.setAttribute('aria-label', label);
-        // Focus le premier lien du menu quand il s'ouvre (accessibilité clavier)
         if (isOpen) {
             const firstLink = menu.querySelector('a, button');
             if (firstLink) firstLink.focus();
         }
     });
 
-    // Fermeture via Escape — remet le focus sur le bouton (WCAG 2.1 success criterion 1.4.13)
     document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && menu.classList.contains('open')) {
             menu.classList.remove('open');
@@ -34,27 +29,99 @@ import './styles/app.css';
 }());
 
 // ─── Dropdown utilisateur ─────────────────────────────────────────────────────
-// Ferme le dropdown si le clic se produit en dehors de celui-ci
-document.addEventListener('click', function (e) {
+(function () {
+    const btn = document.getElementById('userDropdownBtn');
     const dropdown = document.getElementById('userDropdown');
-    if (dropdown && !dropdown.contains(e.target)) {
-        dropdown.classList.remove('open');
-        // Réinitialise aria-expanded pour les lecteurs d'écran
-        const toggle = dropdown.querySelector('[aria-haspopup]');
-        if (toggle) toggle.setAttribute('aria-expanded', 'false');
-    }
-});
+    if (!btn || !dropdown) return;
 
-// Fermeture du dropdown via Escape
-document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Escape') return;
-    const dropdown = document.getElementById('userDropdown');
-    if (dropdown && dropdown.classList.contains('open')) {
-        dropdown.classList.remove('open');
-        const toggle = dropdown.querySelector('[aria-haspopup]');
-        if (toggle) {
-            toggle.setAttribute('aria-expanded', 'false');
-            toggle.focus();
+    btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        const isOpen = dropdown.classList.toggle('open');
+        btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    document.addEventListener('click', function (e) {
+        if (dropdown.classList.contains('open') && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
         }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && dropdown.classList.contains('open')) {
+            dropdown.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.focus();
+        }
+    });
+}());
+
+// ─── Indicateur de force du mot de passe ─────────────────────────────────────
+(function () {
+    const input = document.querySelector('[data-strength-input]');
+    if (!input) return;
+
+    const list = input.closest('div')?.querySelector('.pw-requirements');
+    if (!list) return;
+
+    const checks = {
+        length: (v) => v.length >= 12,
+        lower:  (v) => /[a-z]/.test(v),
+        upper:  (v) => /[A-Z]/.test(v),
+        digit:  (v) => /[0-9]/.test(v),
+    };
+
+    input.addEventListener('input', function () {
+        const val = input.value;
+        list.classList.toggle('visible', val.length > 0);
+        list.querySelectorAll('li[data-req]').forEach(function (li) {
+            const key = li.dataset.req;
+            const pass = checks[key]?.(val) ?? false;
+            li.classList.toggle('ok', pass);
+            li.classList.toggle('fail', val.length > 0 && !pass);
+        });
+    });
+}());
+
+// ─── Bannière de consentement cookies ────────────────────────────────────────
+(function () {
+    const FONT_URL = 'https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&display=swap';
+    const KEY = 'cookie_consent';
+
+    function loadFonts() {
+        if (document.querySelector('link[data-gfonts]')) return;
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.setAttribute('data-gfonts', '');
+        link.href = FONT_URL;
+        document.head.appendChild(link);
     }
-});
+
+    const consent = localStorage.getItem(KEY);
+
+    if (consent === 'all') {
+        loadFonts();
+        return;
+    }
+
+    if (consent === 'essential') {
+        return;
+    }
+
+    // Pas de consentement enregistré — afficher la bannière
+    const banner = document.getElementById('cookieBanner');
+    if (!banner) return;
+
+    banner.classList.add('visible');
+
+    document.getElementById('cookieAcceptAll')?.addEventListener('click', function () {
+        localStorage.setItem(KEY, 'all');
+        banner.classList.remove('visible');
+        loadFonts();
+    });
+
+    document.getElementById('cookieEssential')?.addEventListener('click', function () {
+        localStorage.setItem(KEY, 'essential');
+        banner.classList.remove('visible');
+    });
+}());

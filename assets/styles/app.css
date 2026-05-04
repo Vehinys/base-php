@@ -73,6 +73,29 @@
         background: color-mix(in srgb, var(--color-primary) 22%, var(--color-text));
     }
 
+    .btn-danger {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.75rem;
+        background: color-mix(in srgb, var(--color-error) 12%, transparent);
+        color: var(--color-error);
+        font-weight: 700;
+        font-size: 0.9375rem;
+        letter-spacing: 0.01em;
+        border-radius: 0.25rem;
+        border: 1.5px solid color-mix(in srgb, var(--color-error) 40%, transparent);
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.15s, border-color 0.15s;
+    }
+
+    .btn-danger:hover {
+        background: color-mix(in srgb, var(--color-error) 20%, transparent);
+        border-color: var(--color-error);
+    }
+
     .btn-ghost {
         display: inline-flex;
         align-items: center;
@@ -221,6 +244,45 @@
         color: var(--color-success);
         font-size: 0.875rem;
     }
+
+    /* ─── INDICATEUR DE FORCE DU MOT DE PASSE ───── */
+
+    .pw-requirements {
+        list-style: none;
+        padding: 0;
+        margin: 0.5rem 0 0;
+        display: none;
+        flex-direction: column;
+        gap: 0.3125rem;
+    }
+
+    .pw-requirements.visible {
+        display: flex;
+    }
+
+    .pw-requirements li {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--color-muted);
+        transition: color 0.2s;
+    }
+
+    .pw-requirements li.ok { color: var(--color-success); }
+    .pw-requirements li.fail { color: var(--color-error); }
+
+    .req-icon {
+        font-size: 0.75rem;
+        line-height: 1;
+        width: 0.875rem;
+        flex-shrink: 0;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .req-icon::before { content: '○'; }
+    .pw-requirements li.ok   .req-icon::before { content: '✓'; }
+    .pw-requirements li.fail .req-icon::before { content: '✗'; }
 
     /* ─── BADGE ───────────────────────────────────── */
 
@@ -512,3 +574,60 @@
         to   { opacity: 1; }
     }
 }
+
+/* ─── BANNIÈRE COOKIES ─────────────────────────────────────────────────────── */
+
+#cookieBanner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+    padding: 1rem 1.25rem;
+    display: none;
+    flex-direction: column;
+    gap: 0.875rem;
+    animation: slideUp 0.25s ease;
+}
+
+#cookieBanner.visible { display: flex; }
+
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+@media (min-width: 640px) {
+    #cookieBanner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        gap: 1.5rem;
+    }
+}
+
+#cookieBanner p {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    margin: 0;
+    line-height: 1.55;
+    flex: 1;
+}
+
+.cookie-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+/* Lien hover via CSS — pas d'event handler JS inline (conformité CSP) */
+.link-muted {
+    color: var(--color-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.link-muted:hover { color: var(--color-text); }

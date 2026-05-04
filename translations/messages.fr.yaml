@@ -72,6 +72,13 @@ form:
     agree_terms_required: "Vous devez accepter les conditions."
     password_required: "Le mot de passe est obligatoire."
     password_min: "Le mot de passe doit contenir au moins {{ limit }} caractères."
+    password_complexity: "Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre."
+    password_pwned: "Ce mot de passe a été compromis dans une fuite de données connue. Choisissez-en un autre."
+    pw_strength_title: "Exigences CNIL"
+    pw_req_length: "12 caractères minimum"
+    pw_req_lower: "Une lettre minuscule (a-z)"
+    pw_req_upper: "Une lettre majuscule (A-Z)"
+    pw_req_digit: "Un chiffre (0-9)"
 
 footer:
     tagline: "Starter Symfony 7.4 production-ready — auth, i18n, CI, sécurité."
@@ -91,7 +98,27 @@ legal:
     last_updated_date: "3 mai 2026"
     mentions_intro: "Informations légales obligatoires concernant l'éditeur et l'hébergement du site BaseApp."
 
+account:
+    delete_title: "Supprimer mon compte"
+    delete_desc: "Cette action est irréversible. Vos données personnelles seront anonymisées conformément au RGPD. Vos contenus seront conservés sous forme anonyme."
+    delete_confirm: "Je comprends que cette action est définitive et irréversible."
+    delete_password: "Confirmez avec votre mot de passe actuel"
+    delete_submit: "Supprimer définitivement mon compte"
+    delete_success: "Votre compte a été supprimé. À bientôt."
+    delete_password_wrong: "Mot de passe incorrect. Suppression annulée."
+    delete_csrf_invalid: "Token de sécurité invalide. Réessayez."
+    export_title: "Exporter mes données"
+    export_desc: "Téléchargez une copie de vos données personnelles au format JSON (art. 20 RGPD)."
+    export_submit: "Télécharger mes données"
+
+cookie:
+    banner_text: "Nous utilisons des cookies essentiels pour le fonctionnement du site. Google Fonts (polices) peut déposer des traceurs tiers."
+    accept_all: "Tout accepter"
+    essential_only: "Essentiels uniquement"
+    learn_more: "En savoir plus"
+
 error:
+    too_many_requests: "Trop de tentatives. Réessayez dans quelques minutes."
     404_title: "Page introuvable"
     404_desc: "La page que vous cherchez n'existe pas ou a été déplacée."
     500_title: "Erreur serveur"

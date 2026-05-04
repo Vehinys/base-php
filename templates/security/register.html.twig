@@ -61,9 +61,34 @@
                     {{ form_errors(form.email) }}
                 </div>
 
+                <div style="margin-bottom:0.75rem">
+                    {{ form_label(form.plainPassword.first, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.plainPassword.first, {attr: {class: 'form-input'}}) }}
+                    {{ form_errors(form.plainPassword.first) }}
+                    <ul class="pw-requirements" aria-live="polite"
+                        aria-label="{{ 'form.pw_strength_title'|trans }}">
+                        <li data-req="length">
+                            <span class="req-icon" aria-hidden="true"></span>
+                            {{ 'form.pw_req_length'|trans }}
+                        </li>
+                        <li data-req="lower">
+                            <span class="req-icon" aria-hidden="true"></span>
+                            {{ 'form.pw_req_lower'|trans }}
+                        </li>
+                        <li data-req="upper">
+                            <span class="req-icon" aria-hidden="true"></span>
+                            {{ 'form.pw_req_upper'|trans }}
+                        </li>
+                        <li data-req="digit">
+                            <span class="req-icon" aria-hidden="true"></span>
+                            {{ 'form.pw_req_digit'|trans }}
+                        </li>
+                    </ul>
+                </div>
+
                 <div style="margin-bottom:1.25rem">
-                    {{ form_label(form.plainPassword, null, {label_attr: {class: 'form-label'}}) }}
-                    {{ form_widget(form.plainPassword, {attr: {class: 'form-input', autocomplete: 'new-password'}}) }}
+                    {{ form_label(form.plainPassword.second, null, {label_attr: {class: 'form-label'}}) }}
+                    {{ form_widget(form.plainPassword.second, {attr: {class: 'form-input'}}) }}
                     {{ form_errors(form.plainPassword) }}
                 </div>
 

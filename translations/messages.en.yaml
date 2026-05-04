@@ -72,6 +72,13 @@ form:
     agree_terms_required: "You must accept the terms."
     password_required: "Password is required."
     password_min: "Password must be at least {{ limit }} characters."
+    password_complexity: "Password must contain at least one uppercase letter, one lowercase letter, and one digit."
+    password_pwned: "This password has been found in a known data breach. Please choose a different one."
+    pw_strength_title: "CNIL requirements"
+    pw_req_length: "At least 12 characters"
+    pw_req_lower: "One lowercase letter (a-z)"
+    pw_req_upper: "One uppercase letter (A-Z)"
+    pw_req_digit: "One digit (0-9)"
 
 footer:
     tagline: "Production-ready Symfony 7.4 starter — auth, i18n, CI, security."
@@ -91,7 +98,27 @@ legal:
     last_updated_date: "May 3, 2026"
     mentions_intro: "Mandatory legal information about the publisher and hosting of the BaseApp website."
 
+account:
+    delete_title: "Delete my account"
+    delete_desc: "This action is irreversible. Your personal data will be anonymised in accordance with GDPR. Your content will be retained in anonymous form."
+    delete_confirm: "I understand this action is permanent and irreversible."
+    delete_password: "Confirm with your current password"
+    delete_submit: "Permanently delete my account"
+    delete_success: "Your account has been deleted. See you around."
+    delete_password_wrong: "Incorrect password. Deletion cancelled."
+    delete_csrf_invalid: "Invalid security token. Please try again."
+    export_title: "Export my data"
+    export_desc: "Download a copy of your personal data in JSON format (GDPR art. 20)."
+    export_submit: "Download my data"
+
+cookie:
+    banner_text: "We use essential cookies for the site to function. Google Fonts (typefaces) may deposit third-party trackers."
+    accept_all: "Accept all"
+    essential_only: "Essential only"
+    learn_more: "Learn more"
+
 error:
+    too_many_requests: "Too many attempts. Please try again in a few minutes."
     404_title: "Page not found"
     404_desc: "The page you are looking for does not exist or has been moved."
     500_title: "Server error"

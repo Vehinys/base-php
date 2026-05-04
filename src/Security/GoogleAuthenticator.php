@@ -9,6 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use League\OAuth2\Client\Provider\GoogleUser;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,6 +28,8 @@ class GoogleAuthenticator extends OAuth2Authenticator
         private ClientRegistry $clientRegistry,
         private EntityManagerInterface $em,
         private RouterInterface $router,
+        #[Autowire(service: 'monolog.logger.security')]
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -46,15 +50,23 @@ class GoogleAuthenticator extends OAuth2Authenticator
                 $email = $googleUser->getEmail();
                 $repo = $this->em->getRepository(User::class);
 
-                // Priorité à l'ID Google ; fallback sur l'email pour lier un compte existant
                 $user = $repo->findOneBy(['googleId' => $googleUser->getId()])
                     ?? $repo->findOneBy(['email' => $email]);
+
+                if ($user && $user->getEmail() !== $email) {
+                    // L'email Google a changé depuis le dernier login — on ne met pas à jour
+                    // automatiquement (risque de hijacking) mais on le trace
+                    $this->logger->warning('google_oauth.email_mismatch', [
+                        'user_id' => $user->getId(),
+                        'stored_email' => $user->getEmail(),
+                        'google_email' => $email,
+                    ]);
+                }
 
                 if (!$user) {
                     $user = (new User())->setEmail($email);
                 }
 
-                // Google garantit la propriété de l'email — valide aussi les comptes locaux liés
                 $user->setIsVerified(true)
                     ->setGoogleId($googleUser->getId())
                     ->setName($googleUser->getName())

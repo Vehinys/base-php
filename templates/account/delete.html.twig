@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'account.delete_title'|trans }} — {{ 'app.name'|trans }}{% endblock %}
+{% block robots %}noindex,nofollow{% endblock %}
+
+{% block body %}
+<div class="auth-page">
+
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;overflow:hidden">
+        <div style="position:absolute;inset:0;
+                    background-image:linear-gradient(var(--color-border) 1px,transparent 1px),
+                                     linear-gradient(90deg,var(--color-border) 1px,transparent 1px);
+                    background-size:48px 48px;
+                    opacity:0.45;
+                    mask-image:radial-gradient(ellipse 70% 80% at 50% 40%,black 10%,transparent 100%)"></div>
+    </div>
+
+    <div class="auth-card">
+
+        <div style="margin-bottom:2rem">
+            <div style="width:48px;height:48px;border:1.5px solid var(--color-error);border-radius:0.375rem;
+                        display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                     stroke="var(--color-error)" stroke-width="1.5"
+                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+                    <path d="M10 11v6M14 11v6"/>
+                    <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+                </svg>
+            </div>
+            <h1 style="font-family:var(--font-display);font-size:1.75rem;font-weight:800;
+                       color:var(--color-error);margin:0 0 0.75rem;letter-spacing:-0.03em">
+                {{ 'account.delete_title'|trans }}
+            </h1>
+            <p style="font-size:0.9rem;color:var(--color-muted);line-height:1.65;margin:0">
+                {{ 'account.delete_desc'|trans }}
+            </p>
+        </div>
+
+        {% for msg in app.flashes('error') %}
+            <div class="alert-error" style="margin-bottom:1.25rem" role="alert">{{ msg|trans }}</div>
+        {% endfor %}
+
+        <div class="card-gradient">
+            <form method="post" action="{{ path('app_account_delete') }}" novalidate>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('account_delete') }}">
+
+                {% if app.user.password is not null %}
+                    <div style="margin-bottom:1.5rem">
+                        <label for="delete_password" class="form-label">
+                            {{ 'account.delete_password'|trans }}
+                        </label>
+                        <input type="password" id="delete_password" name="password"
+                               class="form-input"
+                               autocomplete="current-password"
+                               required aria-required="true">
+                    </div>
+                {% endif %}
+
+                <div style="display:flex;align-items:flex-start;gap:0.75rem;
+                            padding:1rem;background:color-mix(in srgb,var(--color-error) 6%,transparent);
+                            border:1px solid color-mix(in srgb,var(--color-error) 30%,transparent);
+                            border-radius:0.375rem;margin-bottom:1.5rem">
+                    <input type="checkbox" id="delete_confirm" name="confirm" required
+                           style="width:1rem;height:1rem;margin-top:0.125rem;accent-color:var(--color-error);cursor:pointer;flex-shrink:0">
+                    <label for="delete_confirm"
+                           style="font-size:0.875rem;color:var(--color-text);cursor:pointer;line-height:1.5">
+                        {{ 'account.delete_confirm'|trans }}
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-danger"
+                        style="width:100%;padding:0.875rem;font-size:0.9375rem;justify-content:center">
+                    {{ 'account.delete_submit'|trans }}
+                </button>
+            </form>
+
+            <div style="margin-top:1.25rem;text-align:center">
+                <a href="{{ path('app_home') }}"
+                   style="font-size:0.875rem;color:var(--color-muted);text-decoration:none">
+                    {{ 'error.back_home'|trans }}
+                </a>
+            </div>
+        </div>
+
+        <div style="margin-top:1.5rem;padding:1rem;border:1px solid var(--color-border);border-radius:0.375rem">
+            <p style="font-size:0.8125rem;color:var(--color-muted);margin:0 0 0.75rem;font-weight:600;
+                      font-family:var(--font-display);text-transform:uppercase;letter-spacing:0.08em">
+                RGPD — {{ 'account.export_title'|trans }}
+            </p>
+            <p style="font-size:0.8125rem;color:var(--color-muted);margin:0 0 0.875rem;line-height:1.6">
+                {{ 'account.export_desc'|trans }}
+            </p>
+            <a href="{{ path('app_account_export') }}" class="btn-ghost"
+               style="font-size:0.8125rem;padding:0.5rem 1rem">
+                {{ 'account.export_submit'|trans }}
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

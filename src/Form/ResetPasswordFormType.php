@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * @extends AbstractType<array<string, mixed>>
@@ -24,7 +25,7 @@ class ResetPasswordFormType extends AbstractType
             'mapped' => false,
             'first_options' => [
                 'label' => 'auth.new_password',
-                'attr' => ['autocomplete' => 'new-password'],
+                'attr' => ['autocomplete' => 'new-password', 'data-strength-input' => ''],
             ],
             'second_options' => [
                 'label' => 'form.password_confirm',
@@ -33,7 +34,11 @@ class ResetPasswordFormType extends AbstractType
             'invalid_message' => 'form.password_mismatch',
             'constraints' => [
                 new NotBlank(message: 'form.password_required'),
-                new Length(min: 8, max: 4096, minMessage: 'form.password_min'),
+                new Length(min: 12, max: 4096, minMessage: 'form.password_min'),
+                new Regex(
+                    pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+                    message: 'form.password_complexity'
+                ),
             ],
         ]);
     }
