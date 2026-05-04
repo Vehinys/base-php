@@ -1,52 +1,119 @@
 security:
+    # -------------------------------------------------------------------------
+    # Hashage des mots de passe
+    # -------------------------------------------------------------------------
+    # 'auto' sélectionne automatiquement le meilleur algorithme disponible
+    # sur la version PHP courante. En PHP 8.x, cela correspond à Argon2id
+    # (sodium) ou bcrypt selon les extensions disponibles.
+    # Le rehashage est transparent : si l'algorithme change après une mise à jour
+    # PHP, le nouveau hash est calculé automatiquement lors de la prochaine connexion.
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
+    # -------------------------------------------------------------------------
+    # Provider utilisateur
+    # -------------------------------------------------------------------------
+    # Charge l'entité User depuis la base de données par la propriété 'email'.
+    # Ce provider est utilisé par le firewall 'main' et par Security::login().
+    # Le champ 'email' est l'identifiant Symfony (getUserIdentifier() dans User.php).
     providers:
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
 
+    # -------------------------------------------------------------------------
+    # Firewalls
+    # -------------------------------------------------------------------------
     firewalls:
+        # Firewall dev : désactive la sécurité sur les routes Symfony internes
+        # (Profiler, Web Debug Toolbar, assets compilés par Webpack Encore).
+        # IMPORTANT : ce firewall doit rester EN PREMIER — les patterns sont évalués dans l'ordre.
         dev:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
+
+        # Firewall principal : couvre toutes les autres routes de l'application.
         main:
+            # lazy: true → la session et l'utilisateur ne sont chargés que si nécessaire
+            # (évite une requête DB sur les pages publiques sans cookie de session)
             lazy: true
             provider: app_user_provider
+
+            # entry_point : authenticator appelé pour initier l'authentification
+            # quand une route protégée est accédée sans session (redirige vers /login)
             entry_point: App\Security\AppAuthenticator
-            # Vérifie isVerified avant toute connexion locale (OAuth = always verified)
+
+            # user_checker : appelé en pré-auth pour vérifier l'état du compte
+            # UserChecker bloque les comptes dont l'e-mail n'est pas vérifié.
+            # Les authenticators OAuth (Google, Discord) forcent isVerified=true,
+            # donc ce checker ne bloque que les connexions email/password locales.
             user_checker: App\Security\UserChecker
+
+            # Authenticators personnalisés (ordre : AppAuthenticator en premier car entry_point)
+            #   - AppAuthenticator : formulaire email/mot de passe (POST /login)
+            #   - GoogleAuthenticator : callback OAuth2 Google (/connect/google/check)
+            #   - DiscordAuthenticator : callback OAuth2 Discord (/connect/discord/check)
             custom_authenticators:
                 - App\Security\AppAuthenticator
                 - App\Security\GoogleAuthenticator
                 - App\Security\DiscordAuthenticator
+
+            # Déconnexion
             logout:
-                path: app_logout
-                target: app_home
-                # Protège le logout contre le CSRF — requête POST + token _csrf_token requis
+                path: app_logout     # Route dont le nom est intercepté par le firewall
+                target: app_home     # Redirection après déconnexion réussie
+                # Protection CSRF : le lien /logout doit soumettre un token dans un formulaire POST.
+                # Sans cela, un lien externe pourrait forcer la déconnexion (CSRF logout attack).
                 enable_csrf: true
                 csrf_token_id: logout
                 csrf_parameter: _csrf_token
+
+            # Cookie "Se souvenir de moi" — durée 7 jours (604800 secondes)
+            # samesite: lax protège contre les attaques CSRF cross-site tout en
+            # autorisant la navigation normale (liens entrants).
+            # Le secret est kernel.secret (APP_SECRET dans .env).
             remember_me:
                 secret: '%kernel.secret%'
-                lifetime: 604800
+                lifetime: 604800  # 7 jours en secondes
                 samesite: lax
-            # Bloque une IP après 5 échecs d'authentification sur 15 minutes (symfony/rate-limiter requis)
+
+            # Rate limiting natif Symfony sur le formulaire de login.
+            # Bloque une IP après 5 échecs consécutifs pendant 15 minutes.
+            # Nécessite symfony/rate-limiter (déjà installé).
+            # Note : ce throttling est distinct du rate limiter applicatif sur /register
+            # et /reset-password (déclaré dans config/packages/rate_limiter.yaml).
             login_throttling:
                 max_attempts: 5
                 interval: '15 minutes'
 
+    # -------------------------------------------------------------------------
+    # Contrôle d'accès par URL
+    # -------------------------------------------------------------------------
+    # Les règles sont évaluées dans l'ordre — la première correspondance gagne.
+    # PUBLIC_ACCESS = pas d'authentification requise (équivalent IS_AUTHENTICATED_ANONYMOUSLY).
+    # Si aucune règle ne correspond, Symfony requiert ROLE_USER par défaut.
+    #
+    # Architecture actuelle : l'application est majoritairement publique.
+    # Les routes sensibles (/account/delete, /account/export) sont protégées
+    # par #[IsGranted] directement dans AccountController, plus précis que l'URL.
     access_control:
-        - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/register, roles: PUBLIC_ACCESS }
-        - { path: ^/verify, roles: PUBLIC_ACCESS }
-        - { path: ^/reset-password, roles: PUBLIC_ACCESS }
-        - { path: ^/connect, roles: PUBLIC_ACCESS }
-        - { path: ^/locale, roles: PUBLIC_ACCESS }
-        - { path: ^/, roles: PUBLIC_ACCESS }
+        - { path: ^/login,          roles: PUBLIC_ACCESS }  # Formulaire de connexion
+        - { path: ^/register,       roles: PUBLIC_ACCESS }  # Formulaire d'inscription
+        - { path: ^/verify,         roles: PUBLIC_ACCESS }  # Vérification email (token en URL)
+        - { path: ^/reset-password, roles: PUBLIC_ACCESS }  # Réinitialisation MDP
+        - { path: ^/connect,        roles: PUBLIC_ACCESS }  # Initiation et callback OAuth
+        - { path: ^/locale,         roles: PUBLIC_ACCESS }  # Changement de langue
+        - { path: ^/,               roles: PUBLIC_ACCESS }  # Toutes les autres routes
 
+# -------------------------------------------------------------------------
+# Configuration spécifique à l'environnement de test
+# -------------------------------------------------------------------------
+# En test, le hashage argon2 est remplacé par bcrypt avec des paramètres très
+# légers (cost=4, time_cost=3, memory_cost=10) pour accélérer les tests unitaires
+# et fonctionnels qui manipulent des mots de passe (hashPassword, isPasswordValid).
+# Ces valeurs sont intentionnellement non-sécurisées — elles ne sont jamais
+# utilisées en dehors de l'environnement 'test'.
 when@test:
     security:
         password_hashers:

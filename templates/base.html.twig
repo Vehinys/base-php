@@ -1,3 +1,32 @@
+{#
+    Layout de base hérité par tous les templates de l'application.
+
+    Blocs disponibles pour les templates enfants :
+      - block title       : balise <title> (défaut : app.name)
+      - block description : meta description (défaut : app.description)
+      - block robots      : meta robots (défaut : index,follow — surcharger avec noindex,nofollow sur pages privées)
+      - block og_title    : titre Open Graph (défaut : block title)
+      - block og_description : description Open Graph (défaut : block description)
+      - block og_image    : image Open Graph (défaut : favicon.svg)
+      - block nav_items   : liens de navigation supplémentaires dans la barre desktop
+      - block stylesheets : feuilles de style (Webpack Encore par défaut)
+      - block javascripts : scripts JS (Webpack Encore par défaut)
+      - block body        : contenu principal de la page
+
+    Polices Google Fonts :
+      Chargées via JS uniquement après consentement aux cookies (localStorage 'cookie_consent' === 'all').
+      Ce pattern évite de déposer des traceurs tiers sans consentement (CNIL RGPD).
+      Minifié en ligne avec nonce CSP car la CSP bloque les scripts sans attribut nonce.
+
+    Canonical URL :
+      Construite sans query string (pathInfo seul) pour éviter le duplicate content
+      sur les pages dont l'URL varie selon les paramètres de filtrage ou de pagination.
+
+    Bannière cookies :
+      #cookieBanner est masqué par CSS par défaut et affiché par app.js si aucun
+      consentement n'est stocké dans localStorage. L'attribut aria-live="polite"
+      annonce le bandeau aux lecteurs d'écran sans interrompre la navigation.
+#}
 <!DOCTYPE html>
 <html lang="{{ app.request.locale|slice(0,2) }}" data-theme="dark">
 <head>
@@ -9,10 +38,12 @@
     <link rel="icon" href="{{ asset('favicon.svg') }}" type="image/svg+xml">
 
     {# Polices chargées via JS uniquement après consentement — conformité RGPD CNIL #}
+    {# Script minifié en ligne avec nonce CSP (csp_nonce() fourni par NelmioSecurityBundle) #}
     <script nonce="{{ csp_nonce('script') }}">
     (function(){var c=localStorage.getItem('cookie_consent');if(c==='all'){var l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:wght@400;500;600&display=swap';document.head.appendChild(l);}})();
     </script>
 
+    {# Open Graph — partage sur réseaux sociaux. og:image est recommandé min. 1200×630px en prod. #}
     <meta property="og:title" content="{% block og_title %}{{ 'app.name'|trans }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ 'app.description'|trans }}{% endblock %}">
     <meta property="og:type" content="website">
@@ -31,6 +62,11 @@
 </head>
 <body class="min-h-screen flex flex-col" style="background-color:var(--color-bg);color:var(--color-text)">
 
+    {#
+        Skip link — accessibilité (RGAA 4.1 critère 12.7).
+        sr-only le masque visuellement ; focus:not-sr-only le réaffiche au focus clavier.
+        Obligatoire sur toute page avec une navigation répétée en haut.
+    #}
     <a href="#main-content"
        class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 btn-primary"
        style="font-size:0.875rem">
@@ -38,6 +74,7 @@
     </a>
 
     {# ═══════════════════════════════════════════════════════ HEADER #}
+    {# role="banner" = landmark ARIA pour les lecteurs d'écran (RGAA 12.6) #}
     <header role="banner"
             style="background:var(--color-bg);border-bottom:1px solid var(--color-border);position:sticky;top:0;z-index:40">
         <nav role="navigation"
@@ -65,7 +102,10 @@
             {# Actions desktop — masquées mobile, visibles tablette+ (CSS .nav-desktop) #}
             <div class="nav-desktop" style="align-items:center;gap:1rem">
 
-                {# Sélecteur de langue #}
+                {#
+                    Sélecteur de langue — aria-pressed indique la langue active aux lecteurs d'écran.
+                    hreflang permet aux moteurs de recherche de découvrir l'URL alternante.
+                #}
                 <div role="group" aria-label="{{ 'nav.language'|trans }}"
                      style="display:flex;align-items:center;gap:2px;background:var(--color-surface-2);border:1px solid var(--color-border);border-radius:0.375rem;padding:2px">
                     <a href="{{ path('app_locale', {locale: 'fr'}) }}"
@@ -86,9 +126,13 @@
                     </a>
                 </div>
 
-                {# Auth #}
+                {# Auth — dropdown si connecté, liens login/register sinon #}
                 {% if app.user %}
                     <div class="user-dropdown" id="userDropdown">
+                        {#
+                            aria-haspopup + aria-expanded gérés par app.js (listener sur #userDropdownBtn).
+                            Le bouton n'a pas d'onclick inline (CSP interdit les event handlers HTML).
+                        #}
                         <button id="userDropdownBtn"
                                 aria-haspopup="true"
                                 aria-expanded="false"
@@ -102,6 +146,7 @@
                                      decoding="async"
                                      style="border-radius:50%;object-fit:cover">
                             {% else %}
+                                {# Fallback initiale quand l'utilisateur n'a pas d'avatar (OAuth ou local) #}
                                 <span aria-hidden="true"
                                       style="width:24px;height:24px;border-radius:50%;background:var(--color-primary);display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff">
                                     {{ (app.user.name ?? app.user.email)|slice(0,1)|upper }}
@@ -115,7 +160,7 @@
                             </svg>
                         </button>
                         <div class="user-dropdown-panel" role="menu">
-                            {# POST obligatoire pour le logout — CSRF requis via security.yaml #}
+                            {# POST obligatoire pour le logout — CSRF requis via security.yaml (enable_csrf: true) #}
                             <form method="post" action="{{ path('app_logout') }}">
                                 <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                                 <button type="submit" class="dropdown-item" role="menuitem">
@@ -137,6 +182,7 @@
             </div>
 
             {# Hamburger — visible mobile, masqué tablette+ (CSS .nav-hamburger) #}
+            {# data-label-* permet à app.js de changer l'aria-label selon l'état ouvert/fermé #}
             <button class="nav-hamburger"
                     id="mobileMenuBtn"
                     aria-controls="mobileMenu"
@@ -162,6 +208,7 @@
                 <span style="padding:0.625rem 0;font-size:0.875rem;color:var(--color-muted);border-bottom:1px solid var(--color-border)">
                     {{ app.user.name ?? app.user.email }}
                 </span>
+                {# Même pattern CSRF que le logout desktop #}
                 <form method="post" action="{{ path('app_logout') }}">
                     <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
                     <button type="submit"
@@ -195,11 +242,13 @@
     </header>
 
     {# ═══════════════════════════════════════════════════════ CONTENU #}
+    {# id="main-content" est la cible du skip link — landmark ARIA main (RGAA 12.6) #}
     <main id="main-content" role="main" class="flex-1">
         {% block body %}{% endblock %}
     </main>
 
     {# ═══════════════════════════════════════════════════════ FOOTER #}
+    {# role="contentinfo" = landmark ARIA footer (RGAA 12.6) #}
     <footer role="contentinfo"
             style="background-color:var(--color-surface);border-top:1px solid var(--color-border);margin-top:auto">
 
@@ -334,7 +383,13 @@
         </div>
     </footer>
 
-    {# ═══════════════════════════════════════════════════════ BANNIÈRE COOKIES #}
+    {#
+        ═══════════════════════════════════════════════════════ BANNIÈRE COOKIES
+        Masquée par défaut (CSS : #cookieBanner { display: none }).
+        app.js l'affiche si localStorage 'cookie_consent' n'est pas défini.
+        role="dialog" + aria-live="polite" : annoncée aux lecteurs d'écran sans interruption.
+        Les boutons déclenchent des callbacks JS qui mettent à jour localStorage et masquent le bandeau.
+    #}
     <div id="cookieBanner" role="dialog" aria-label="{{ 'cookie.banner_text'|trans }}" aria-live="polite">
         <p>
             {{ 'cookie.banner_text'|trans }}
