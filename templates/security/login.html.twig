@@ -42,9 +42,25 @@
         </div>
 
         {% if error %}
-            <div class="alert-error" style="margin-bottom:1.25rem" role="alert">
-                {{ error.messageKey|trans(error.messageData, 'security') }}
-            </div>
+            {% if error.messageKey == 'auth.email_not_verified' %}
+                <div class="alert-error" style="margin-bottom:1.25rem" role="alert">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                    <form method="post" action="{{ path('app_resend_verification') }}"
+                          style="margin-top:0.75rem">
+                        <input type="hidden" name="email" value="{{ last_username }}">
+                        <input type="hidden" name="_csrf_token" value="{{ csrf_token('resend_verification') }}">
+                        <button type="submit"
+                                style="background:none;border:none;padding:0;color:var(--color-primary);
+                                       font-size:0.875rem;font-weight:600;cursor:pointer;text-decoration:underline">
+                            {{ 'auth.resend_verification'|trans }}
+                        </button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="alert-error" style="margin-bottom:1.25rem" role="alert">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
         {% endif %}
 
         <div class="card-gradient">
@@ -81,6 +97,13 @@
                         style="width:100%;padding:0.875rem;font-size:1rem;justify-content:center">
                     {{ 'auth.login_submit'|trans }}
                 </button>
+
+                <p style="text-align:center;margin-top:0.875rem;font-size:0.875rem">
+                    <a href="{{ path('app_reset_password_request') }}"
+                       style="color:var(--color-muted);text-decoration:none">
+                        {{ 'auth.forgot_password'|trans }}
+                    </a>
+                </p>
             </form>
 
             <div class="divider" style="margin:1.5rem 0">

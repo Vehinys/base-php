@@ -26,10 +26,10 @@ class SitemapController extends AbstractController
         // Génère les URLs absolues pour chaque route
         $entries = array_map(
             fn (array $item) => [
-                'loc'        => $this->generateUrl($item['route'], [], UrlGeneratorInterface::ABSOLUTE_URL),
-                'priority'   => $item['priority'],
+                'loc' => $this->generateUrl($item['route'], [], UrlGeneratorInterface::ABSOLUTE_URL),
+                'priority' => $item['priority'],
                 'changefreq' => $item['changefreq'],
-                'lastmod'    => date('Y-m-d'),
+                'lastmod' => date('Y-m-d'),
             ],
             $urls
         );

@@ -51,11 +51,12 @@ class DiscordAuthenticator extends OAuth2Authenticator
                     ?? ($email ? $repo->findOneBy(['email' => $email]) : null);
 
                 if (!$user) {
-                    $user = (new User())
-                        // Discord n'expose l'email que si le scope 'email' est accordé — fallback invalide
-                        ->setEmail($email ?? $discordUser->getUsername().'@discord.invalid')
-                        ->setIsVerified((bool) $discordUser->getVerified());
+                    // Discord n'expose l'email que si le scope 'email' est accordé — fallback invalide
+                    $user = (new User())->setEmail($email ?? $discordUser->getUsername().'@discord.invalid');
                 }
+
+                // La connexion OAuth prouve la propriété du compte Discord — valide aussi les comptes locaux liés
+                $user->setIsVerified(true);
 
                 // getAvatarHash() retourne null si l'utilisateur utilise l'avatar par défaut Discord
                 $avatarHash = $discordUser->getAvatarHash();

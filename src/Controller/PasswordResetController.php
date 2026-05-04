@@ -41,7 +41,7 @@ class PasswordResetController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $emailAddress = $form->get('email')->getData();
-            $user         = $repo->findOneBy(['email' => $emailAddress]);
+            $user = $repo->findOneBy(['email' => $emailAddress]);
 
             // Traitement silencieux — ne révèle pas si l'e-mail est enregistré (anti-énumération)
             if ($user) {
@@ -109,7 +109,7 @@ class PasswordResetController extends AbstractController
             ->to((string) $user->getEmail())
             ->subject('Réinitialisation de votre mot de passe — BaseApp')
             ->html($this->renderView('emails/reset_password.html.twig', [
-                'user'     => $user,
+                'user' => $user,
                 'resetUrl' => $resetUrl,
             ]));
 

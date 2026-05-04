@@ -51,13 +51,12 @@ class GoogleAuthenticator extends OAuth2Authenticator
                     ?? $repo->findOneBy(['email' => $email]);
 
                 if (!$user) {
-                    $user = (new User())
-                        ->setEmail($email)
-                        // Google vérifie l'email — pas besoin d'une seconde validation
-                        ->setIsVerified(true);
+                    $user = (new User())->setEmail($email);
                 }
 
-                $user->setGoogleId($googleUser->getId())
+                // Google garantit la propriété de l'email — valide aussi les comptes locaux liés
+                $user->setIsVerified(true)
+                    ->setGoogleId($googleUser->getId())
                     ->setName($googleUser->getName())
                     ->setAvatarUrl($googleUser->getAvatar());
 

@@ -7,6 +7,8 @@ Disallow: /register
 Disallow: /logout
 Disallow: /connect/
 Disallow: /locale/
+Disallow: /verify/
+Disallow: /reset-password
 Disallow: /_profiler/
 Disallow: /_wdt/
 

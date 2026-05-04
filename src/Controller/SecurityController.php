@@ -38,7 +38,7 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', [
             'last_username' => $authenticationUtils->getLastUsername(),
-            'error'         => $authenticationUtils->getLastAuthenticationError(),
+            'error' => $authenticationUtils->getLastAuthenticationError(),
         ]);
     }
 
@@ -116,7 +116,7 @@ class SecurityController extends AbstractController
         }
 
         $email = $request->request->getString('email');
-        $user  = $repo->findOneBy(['email' => $email]);
+        $user = $repo->findOneBy(['email' => $email]);
 
         // Traitement silencieux — ne révèle pas si l'adresse est enregistrée (anti-énumération)
         if ($user && !$user->isVerified()) {
@@ -178,7 +178,7 @@ class SecurityController extends AbstractController
             ->to((string) $user->getEmail())
             ->subject('Vérifiez votre adresse e-mail — BaseApp')
             ->html($this->renderView('emails/verify_email.html.twig', [
-                'user'      => $user,
+                'user' => $user,
                 'verifyUrl' => $verifyUrl,
             ]));
 
